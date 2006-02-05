@@ -1,16 +1,16 @@
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
-Version:	2.0.0
-%define		_snap	20030424
-Release:	0.%{_snap}.0.1
+Version:	2.1.2
+Release:	0.1
 License:	MPL
 Group:		Libraries
-Source0:	%{name}_%{version}_%{_snap}.tar.bz2
-Patch0:		%{name}-pwlib.patch
+Source0:	http://www.ekiga.org/downloads/sources/%{name}-%{version}.tar.gz
+# Source0-md5:	535df3c71292d567f5cb7523768cc258
+#Patch0:		%{name}-opaldir.patch
 URL:		http://www.openh323.org/
-BuildRequires:	pwlib-devel >= 1.4.7
-BuildRequires:	speex-devel >= 1.0
+BuildRequires:	pwlib-devel >= 1.9.2
+BuildRequires:	speex-devel >= 1:1.1.5
 BuildRequires:	libstdc++-devel
 %requires_eq	pwlib
 Obsoletes:	openh323
@@ -39,40 +39,46 @@ Obsoletes:	openh323-devel
 
 %description devel
 Header files and libraries for developing applications that use
-OpenH323.
+Opal.
 
 %description devel -l pl
 Pliki nag³ówkowe i biblioteki konieczne do rozwoju aplikacji
-u¿ywaj±cych OpenH323.
+u¿ywaj±cych Opal.
 
-%package static
-Summary:	Opal static libraries
-Summary(pl):	Biblioteki statyczne Opal
-Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
-Obsoletes:	openh323-static
+#%package static
+#Summary:	Opal static libraries
+#Summary(pl):	Biblioteki statyczne Opal
+#Group:		Development/Libraries
+#Requires:	%{name}-devel = %{version}
+#Obsoletes:	openh323-static
 
-%description static
-OpenH323 static libraries.
+#%description static
+#OpenH323 static libraries.
 
-%description static -l pl
-Biblioteki statyczne OpenH323.
+#%description static -l pl
+#Biblioteki statyczne OpenH323.
 
 %prep
-%setup -qn %{name}
-%patch0 -p1
+%setup -q
+#%patch0 -p1
 
 %build
-PWLIBDIR=%{_datadir}/pwlib; export PWLIBDIR
-OPALDIR=`pwd`; export OPALDIR
-OPENH323_BUILD="yes"; export OPENH323_BUILD
-touch .asnparser.version
+PWLIBDIR=%{_prefix}; export PWLIBDIR
+#OPALDESTDIR=%{_prefix}; export OPALDIR
+#OPENH323_BUILD="yes"; export OPENH323_BUILD
+#cp -f /usr/share/automake/config.sub .
+%{__autoconf}
+%configure \
+	--disable-iax
+#touch .asnparser.version
 
-%{__make} %{?debug:debug}%{!?debug:opt} \
-		CC=%{__cc} CPLUS=%{__cxx} \
-		PWLIB_MAKE=%{_datadir}/pwlib \
-		ASNPARSER=%{_bindir}/asnparser \
-		OPTCCFLAGS="%{rpmcflags}"
+%{__make}
+
+#%{__make} %{?debug:debug}%{!?debug:opt} \
+#		CC=%{__cc} CPLUS=%{__cxx} \
+#		PWLIB_MAKE=%{_datadir}/pwlib \
+#		ASNPARSER=%{_bindir}/asnparser \
+#		OPTCCFLAGS="%{rpmcflags}"
 
 #%%{__make} -C samples/simple %{?debug:debugshared}%{!?debug:optshared} \
 #		CC=%{__cc} CPLUS=%{__cxx} \
@@ -80,16 +86,19 @@ touch .asnparser.version
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/openh323,%{_bindir},%{_datadir}/misc}
+#install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/openh323,%{_bindir},%{_datadir}/misc}
+
+%{__make} install \
+        DESTDIR=$RPM_BUILD_ROOT
 
 #using cp as install won't preserve links
-cp -d lib/lib* $RPM_BUILD_ROOT%{_libdir}
-install include/*.h $RPM_BUILD_ROOT%{_includedir}/openh323
-install version.h $RPM_BUILD_ROOT%{_includedir}/openh323
+#cp -d lib/lib* $RPM_BUILD_ROOT%{_libdir}
+#install include/*.h $RPM_BUILD_ROOT%{_includedir}/openh323
+#install version.h $RPM_BUILD_ROOT%{_includedir}/openh323
 #install samples/simple/obj_*/simph323 $RPM_BUILD_ROOT%{_bindir}
 
-sed -e's@\$(OPENH323DIR)/include@&/openh323@' < openh323u.mak \
-	> $RPM_BUILD_ROOT%{_datadir}/misc/openh323u.mak
+sed -e's@\$(OPALDIR)/include@&/opal@' < opal_inc.mak \
+	> $RPM_BUILD_ROOT%{_datadir}/opal/opal_inc1.mak
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -100,15 +109,15 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 #%attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
+%attr(755,root,root) %{_libdir}/lib*.so.*.*
 
 %files devel
 %defattr(644,root,root,755)
-%doc *.txt
+#%doc *.txt
 %attr(755,root,root) %{_libdir}/*.so
 %{_includedir}/*
-%{_datadir}/misc/*
+%{_datadir}/%{name}
 
-%files static
-%defattr(644,root,root,755)
-%{_libdir}/*.a
+#%files static
+#%defattr(644,root,root,755)
+#%{_libdir}/*.a
