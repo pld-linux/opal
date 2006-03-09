@@ -75,13 +75,13 @@ PWLIBDIR=%{_prefix}; export PWLIBDIR
 %{__make}
 
 #%{__make} %{?debug:debug}%{!?debug:opt} \
-#		CC=%{__cc} CPLUS=%{__cxx} \
+#		CC="%{__cc}" CPLUS=%{__cxx} \
 #		PWLIB_MAKE=%{_datadir}/pwlib \
 #		ASNPARSER=%{_bindir}/asnparser \
 #		OPTCCFLAGS="%{rpmcflags}"
 
 #%%{__make} -C samples/simple %{?debug:debugshared}%{!?debug:optshared} \
-#		CC=%{__cc} CPLUS=%{__cxx} \
+#		CC="%{__cc}" CPLUS=%{__cxx} \
 #		OPTCCFLAGS="%{rpmcflags}"
 
 %install
