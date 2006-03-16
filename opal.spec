@@ -9,8 +9,7 @@ Source0:	http://dl.sourceforge.net/sourceforge/openh323/%{name}-Phobos_rc1-src-t
 # Source0-md5:	a2b03f4f24b5d9cfc157eed7c82d87d7
 #Source0:	http://www.ekiga.org/downloads/beta2/sources/%{name}-%{version}.tar.gz
 #Patch0:		%{name}-opaldir.patch
-#URL:		http://www.openh323.org/
-URL:		http://openh323.sourceforge.net/
+URL:		http://www.openh323.org/
 BuildRequires:	pwlib-devel >= 1.9.3-1
 BuildRequires:	speex-devel >= 1:1.1.5
 BuildRequires:	libstdc++-devel
