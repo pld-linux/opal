@@ -1,16 +1,16 @@
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
-Version:	2.1.3
-Release:	0.2
+Version:	2.2.1
+Release:	0.1
 License:	MPL
 Group:		Libraries
-Source0:	http://dl.sourceforge.net/sourceforge/openh323/%{name}-Phobos_rc1-src-tar.gz
-# Source0-md5:	a2b03f4f24b5d9cfc157eed7c82d87d7
-#Source0:	http://www.ekiga.org/downloads/beta2/sources/%{name}-%{version}.tar.gz
+#Source0:	http://dl.sourceforge.net/sourceforge/openh323/%{name}-Phobos_rc1-src-tar.gz
+Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
+# Source0-md5:	bc6079100e831cf117597bb99b266a0c
 #Patch0:		%{name}-opaldir.patch
 URL:		http://www.openh323.org/
-BuildRequires:	pwlib-devel >= 1.9.3-1
+BuildRequires:	pwlib-devel >= 1.10.0
 BuildRequires:	speex-devel >= 1:1.1.5
 BuildRequires:	libstdc++-devel
 %requires_eq	pwlib
@@ -60,7 +60,7 @@ u¿ywaj±cych Opal.
 #Biblioteki statyczne OpenH323.
 
 %prep
-%setup -q -n %{name}_Phobos_rc1
+%setup -q
 #%patch0 -p1
 
 %build
