@@ -5,10 +5,9 @@ Version:	2.2.1
 Release:	0.1
 License:	MPL
 Group:		Libraries
-#Source0:	http://dl.sourceforge.net/sourceforge/openh323/%{name}-Phobos_rc1-src-tar.gz
 Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
 # Source0-md5:	bc6079100e831cf117597bb99b266a0c
-#Patch0:		%{name}-opaldir.patch
+#Patch0:	%{name}-opaldir.patch
 URL:		http://www.openh323.org/
 BuildRequires:	pwlib-devel >= 1.10.0
 BuildRequires:	speex-devel >= 1:1.1.5
