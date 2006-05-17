@@ -7,6 +7,7 @@ License:	MPL
 Group:		Libraries
 Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
 # Source0-md5:	bc6079100e831cf117597bb99b266a0c
+Patch0:		%{name}-libname.patch
 #Patch0:	%{name}-opaldir.patch
 URL:		http://www.openh323.org/
 BuildRequires:	pwlib-devel >= 1.10.0
@@ -45,29 +46,29 @@ Opal.
 Pliki nag³ówkowe i biblioteki konieczne do rozwoju aplikacji
 u¿ywaj±cych Opal.
 
-#%package static
-#Summary:	Opal static libraries
-#Summary(pl):	Biblioteki statyczne Opal
-#Group:		Development/Libraries
-#Requires:	%{name}-devel = %{version}
-#Obsoletes:	openh323-static
+%package static
+Summary:	Opal static libraries
+Summary(pl):	Biblioteki statyczne Opal
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}
+Obsoletes:	openh323-static
 
-#%description static
-#OpenH323 static libraries.
+%description static
+OpenH323 static libraries.
 
-#%description static -l pl
-#Biblioteki statyczne OpenH323.
+%description static -l pl
+Biblioteki statyczne OpenH323.
 
 %prep
 %setup -q
-#%patch0 -p1
+%patch0 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
 #OPALDESTDIR=%{_prefix}; export OPALDIR
 #OPENH323_BUILD="yes"; export OPENH323_BUILD
 #cp -f /usr/share/automake/config.sub .
-%{__autoconf}
+#{__autoconf}
 %configure 
 #	--disable-iax
 #touch .asnparser.version
