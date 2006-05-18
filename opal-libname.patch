@@ -23,7 +23,7 @@ diff -urNad opal-2.1.3/opal_inc.mak.in /tmp/dpep.vc5Q70/opal-2.1.3/opal_inc.mak.
    STATIC_LIB_FILE = $(LIBDIR)/$(OPAL_FILE)
  else
 -  STATIC_LIB_FILE = $(LIBDIR)/$(subst .$(LIB_SUFFIX),_s.$(STATICLIBEXT),$(OPAL_FILE))
-+  STATIC_LIB_FILE = $(LIBDIR)/$(subst .$(LIB_SUFFIX),$(STATICLIBEXT),$(OPAL_FILE))
++  STATIC_LIB_FILE = $(LIBDIR)/$(subst .$(LIB_SUFFIX),.$(STATICLIBEXT),$(OPAL_FILE))
  endif
  
  $(LIBDIR)/$(OPAL_FILE) : $(TARGETLIB)
