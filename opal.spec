@@ -6,7 +6,7 @@ Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	2.2.1
-Release:	1
+Release:	2
 License:	MPL
 Group:		Libraries
 Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
@@ -36,7 +36,7 @@ bez op³at.
 Summary:	Opal development files
 Summary(pl):	Pliki dla developerów Opal
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	libstdc++-devel
 Requires:	pwlib-devel
 
@@ -52,7 +52,7 @@ u¿ywaj±cych OPAL.
 Summary:	OPAL static libraries
 Summary(pl):	Biblioteki statyczne OPAL
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 OPAL static libraries.
@@ -89,7 +89,7 @@ install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/opal,%{_bindir},%{_datadir}
         DESTDIR=$RPM_BUILD_ROOT
 
 # using cp as install won't preserve links
-cp -d %{_lib}/lib*.a $RPM_BUILD_ROOT%{_libdir}
+cp -d lib/lib*.a $RPM_BUILD_ROOT%{_libdir}
 install version.h $RPM_BUILD_ROOT%{_includedir}/opal
 install samples/simple/obj_*/simpleopal $RPM_BUILD_ROOT%{_bindir}
 sed -i -e 's@\$(OPALDIR)/include@&/opal@' $RPM_BUILD_ROOT%{_datadir}/opal/opal_inc.mak
