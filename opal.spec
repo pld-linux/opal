@@ -92,7 +92,8 @@ install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/opal,%{_bindir},%{_datadir}
 cp -d lib/lib*.a $RPM_BUILD_ROOT%{_libdir}
 install version.h $RPM_BUILD_ROOT%{_includedir}/opal
 install samples/simple/obj_*/simpleopal $RPM_BUILD_ROOT%{_bindir}
-sed -i -e 's@\$(OPALDIR)/include@&/opal@' $RPM_BUILD_ROOT%{_datadir}/opal/opal_inc.mak
+sed -i -e 's@\$(OPALDIR)/include@&/opal@' \
+       -e 's@\$(OPALDIR)/lib@\$(OPALDIR)/%{_lib}@' $RPM_BUILD_ROOT%{_datadir}/opal/opal_inc.mak
 
 %clean
 rm -rf $RPM_BUILD_ROOT
