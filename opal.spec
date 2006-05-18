@@ -79,7 +79,7 @@ OPAL_BUILD="yes"; export OPAL_BUILD
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/openh323,%{_bindir},%{_datadir}/%{name}}
+install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/opal,%{_bindir},%{_datadir}/%{name}}
 
 %{__make} install \
         DESTDIR=$RPM_BUILD_ROOT
