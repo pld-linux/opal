@@ -1,0 +1,44 @@
+--- opal-2.2.1/opal_inc.mak.in~	2006-05-18 18:58:47.731454500 +0200
++++ opal-2.2.1/opal_inc.mak.in	2006-05-18 19:32:42.350611250 +0200
+@@ -67,19 +67,22 @@
+ HAS_SANGOMA=@HAS_SANGOMA@
+ 
+ 
+-OPALDIR=@OPALDIR@
++ifndef OPALDIR
++OPALDIR     = /usr
++endif
+ PWLIBDIR=@PWLIBDIR@
++PWLIBMAKEDIR    = @PWLIBDIR@/share/pwlib/make
+ 
+ LIBDIRS += $(OPALDIR)
+ 
+ 
+ ifdef LIBRARY_MAKEFILE
+-include $(PWLIBDIR)/make/unix.mak
++include $(PWLIBMAKEDIR)/unix.mak
+ else
+ ifdef NOTRACE
+ OBJDIR_SUFFIX := n
+ endif
+-include $(PWLIBDIR)/make/ptlib.mak
++include $(PWLIBMAKEDIR)/ptlib.mak
+ endif
+ 
+ 
+@@ -114,6 +117,7 @@
+ 
+ $(TARGET) :	$(OPAL_LIBDIR)/$(OPAL_FILE)
+ 
++ifdef OPAL_BUILD
+ ifndef LIBRARY_MAKEFILE
+ 
+ ifdef DEBUG
+@@ -127,6 +131,7 @@
+ libs :: $(OPAL_LIBDIR)/$(OPAL_FILE)
+ 
+ endif
++endif
+ 
+ 
+ # End of file
