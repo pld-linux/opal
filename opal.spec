@@ -1,8 +1,12 @@
+#
+# Don't touch this! strip removes all symbols from library
+%define		no_install_post_strip		1
+#
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	2.2.1
-Release:	0.2
+Release:	1
 License:	MPL
 Group:		Libraries
 Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
