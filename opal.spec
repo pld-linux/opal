@@ -8,7 +8,7 @@ Group:		Libraries
 Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
 # Source0-md5:	bc6079100e831cf117597bb99b266a0c
 Patch0:		%{name}-libname.patch
-#Patch0:	%{name}-opaldir.patch
+Patch1:		%{name}-mak_files.patch
 URL:		http://www.openh323.org/
 BuildRequires:	pwlib-devel >= 1.10.0
 BuildRequires:	speex-devel >= 1:1.1.5
@@ -59,25 +59,27 @@ Biblioteki statyczne OPAL.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
 OPALDIR=`pwd`; export OPALDIR
+OPAL_BUILD="yes"; export OPAL_BUILD
 %configure 
 
-%{__make} %{?debug:debugshared}%{!?debug:optshared} \
+%{__make} %{?debug:debug}%{!?debug:opt} \
 	CC="%{__cc}" \
 	CPLUS="%{__cxx}" \
 	OPTCCFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG}"
 
-%{__make} -C samples/simple %{?debug:debugshared}%{!?debug:optshared} \
+%{__make} -C samples/simple %{?debug:debug}%{!?debug:opt} \
 	CC="%{__cc}" \
 	CPLUS=%{__cxx} \
 	OPTCCFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-#install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/openh323,%{_bindir},%{_datadir}/misc}
+install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/openh323,%{_bindir},%{_datadir}/%{name}}
 
 %{__make} install \
         DESTDIR=$RPM_BUILD_ROOT
