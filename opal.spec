@@ -3,7 +3,7 @@
 %define		no_install_post_strip		1
 #
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
-Summary(pl):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
+Summary(pl.UTF-8):   Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	2.2.4
 Release:	1
@@ -27,15 +27,15 @@ Open Source implementation of the ITU H.323 teleconferencing protocol
 that can be used by personal developers and commercial users without
 charge.
 
-%description -l pl
-Celem projektu OPAL jest stworzenie w pe≥ni funkcjonalnej i
-wyposaøonej implementacji protoko≥u telekonferencyjnego ITU H.323,
-ktÛry moøe byÊ uøywany przez uøytkownikÛw prywatnych i komercyjnych
-bez op≥at.
+%description -l pl.UTF-8
+Celem projektu OPAL jest stworzenie w pe≈Çni funkcjonalnej i
+wyposa≈ºonej implementacji protoko≈Çu telekonferencyjnego ITU H.323,
+kt√≥ry mo≈ºe byƒá u≈ºywany przez u≈ºytkownik√≥w prywatnych i komercyjnych
+bez op≈Çat.
 
 %package devel
 Summary:	Opal development files
-Summary(pl):	Pliki dla developerÛw Opal
+Summary(pl.UTF-8):   Pliki dla developer√≥w Opal
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	libstdc++-devel
@@ -45,20 +45,20 @@ Requires:	pwlib-devel
 Header files and libraries for developing applications that use
 OPAL.
 
-%description devel -l pl
-Pliki nag≥Ûwkowe i biblioteki konieczne do rozwoju aplikacji
-uøywaj±cych OPAL.
+%description devel -l pl.UTF-8
+Pliki nag≈Ç√≥wkowe i biblioteki konieczne do rozwoju aplikacji
+u≈ºywajƒÖcych OPAL.
 
 %package static
 Summary:	OPAL static libraries
-Summary(pl):	Biblioteki statyczne OPAL
+Summary(pl.UTF-8):   Biblioteki statyczne OPAL
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 OPAL static libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Biblioteki statyczne OPAL.
 
 %prep
