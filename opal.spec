@@ -3,7 +3,7 @@
 %define		no_install_post_strip		1
 #
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
-Summary(pl.UTF-8):   Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
+Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	2.2.4
 Release:	1
@@ -35,7 +35,7 @@ bez opłat.
 
 %package devel
 Summary:	Opal development files
-Summary(pl.UTF-8):   Pliki dla developerów Opal
+Summary(pl.UTF-8):	Pliki dla developerów Opal
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	libstdc++-devel
@@ -51,7 +51,7 @@ używających OPAL.
 
 %package static
 Summary:	OPAL static libraries
-Summary(pl.UTF-8):   Biblioteki statyczne OPAL
+Summary(pl.UTF-8):	Biblioteki statyczne OPAL
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
