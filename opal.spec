@@ -15,7 +15,7 @@ Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
 URL:		http://www.openh323.org/
 BuildRequires:	libstdc++-devel
-BuildRequires:	pwlib-devel >= 1.10.3
+BuildRequires:	pwlib-devel >= 1.10.4
 BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel >= 1:1.1.5
 %requires_eq	pwlib
