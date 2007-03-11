@@ -5,17 +5,17 @@
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
-Version:	2.2.5
+Version:	2.2.6
 Release:	1
 License:	MPL
 Group:		Libraries
 Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
-# Source0-md5:	d85407085c391fecc89451fd5c132645
+# Source0-md5:	7c83abfe93fbe6a868f5230d5bbec7aa
 Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
 URL:		http://www.openh323.org/
 BuildRequires:	libstdc++-devel
-BuildRequires:	pwlib-devel >= 1.10.4
+BuildRequires:	pwlib-devel >= 1.10.5
 BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel >= 1:1.1.5
 %requires_eq	pwlib
