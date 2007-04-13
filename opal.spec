@@ -5,12 +5,12 @@
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
-Version:	2.2.6
-Release:	2
+Version:	2.2.8
+Release:	1
 License:	MPL
 Group:		Libraries
 Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
-# Source0-md5:	7c83abfe93fbe6a868f5230d5bbec7aa
+# Source0-md5:	700b0c3a7606afc0dc6c9d3c12fcb23b
 Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
 URL:		http://www.openh323.org/
