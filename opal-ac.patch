@@ -1,0 +1,26 @@
+--- opal-3.4.2/opal.m4.orig	2008-11-05 01:14:05.259153713 +0100
++++ opal-3.4.2/opal.m4	2008-11-05 01:19:20.237505967 +0100
+@@ -364,12 +364,13 @@
+          [
+           old_CXXFLAGS="$CXXFLAGS"
+           old_LDFLAGS="$LDFLAGS"
++	  old_LIBS="$LIBS"
+ 
+           CXXFLAGS="$CXXFLAGS $PTLIB_CFLAGS $PTLIB_CXXFLAGS"
+           if test "x${DEBUG_BUILD}" = xyes; then
+-            LDFLAGS="$LDFLAGS $DEBUG_LIBS"
++            LIBS="$LIBS $DEBUG_LIBS"
+           else
+-            LDFLAGS="$LDFLAGS $RELEASE_LIBS"
++            LIBS="$LIBS $RELEASE_LIBS"
+           fi
+ 
+           AC_LANG(C++)
+@@ -388,6 +389,7 @@
+ 
+           CXXFLAGS="$old_CXXFLAGS"
+           LDFLAGS="$old_LDFLAGS"
++          LIBS="$old_LIBS"
+ 
+           OPAL_MSG_CHECK([PTLIB has $1], [$opal_ptlib_option])
+ 	  $4="$opal_ptlib_option"
