@@ -1,3 +1,18 @@
+# TODO:
+#	check why:
+#		checking PTLIB has expat... no
+#		checking PTLIB has vxml... no
+#		checking PTLIB has ipv6... no
+#		checking PTLIB has ldap... no
+#	... and check plugin configuration:
+#                              GSM :  yes (internal)
+#                           H.263+ :  
+#                           H.264  :  no
+#                          THEORA  :  no
+#                    MPEG4 Part 2  :  no
+#                     SpanDSP FAX  :  no
+#                            CAPI  :  no
+#           Quicknet xJACK support :  no
 #
 # Don't touch this! strip removes all symbols from library
 %define		no_install_post_strip		1
