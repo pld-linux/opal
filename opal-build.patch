@@ -1,0 +1,19 @@
+--- opal-3.4.2/samples/simple/Makefile.orig	2008-11-05 17:42:13.403269358 +0100
++++ opal-3.4.2/samples/simple/Makefile	2008-11-05 17:58:28.336264433 +0100
+@@ -53,13 +53,13 @@
+ endif
+ # Get required flags from library
+ 
+-CFLAGS += $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config $(PKG_FLAGS) --cflags opal)
+-LDFLAGS += $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config $(PKG_FLAGS) --libs opal)
++CFLAGS += 
++LDFLAGS += 
+ 
+ 
+ # This part is we like to be tidy and put all the build products
+ # in a sub-directory of a name specific to platform type.
+-OBJDIR = $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config $(PKG_FLAGS) --variable=objdir opal)
++OBJDIR = obj
+ 
+ vpath	%.o   $(OBJDIR)
+ 
