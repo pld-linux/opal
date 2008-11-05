@@ -15,8 +15,11 @@ Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.4/%{name}-%{version}.tar.
 Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
 URL:		http://www.openh323.org/
+BuildRequires:	SDL-devel
 BuildRequires:	libstdc++-devel
-BuildRequires:	pwlib-devel >= 1.10.10
+BuildRequires:	openssl-devel
+BuildRequires:	pkgconfig
+BuildRequires:	ptlib-devel
 BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel >= 1:1.1.5
 %requires_eq	pwlib
@@ -64,8 +67,8 @@ Biblioteki statyczne OPAL.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
+#patch0 -p1
+#patch1 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
