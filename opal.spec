@@ -22,7 +22,7 @@ Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	3.4.2
-Release:	0.1
+Release:	0.2
 License:	MPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.4/%{name}-%{version}.tar.bz2
@@ -63,7 +63,7 @@ Summary(pl.UTF-8):	Pliki dla developerów Opal
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	libstdc++-devel
-Requires:	pwlib-devel
+Requires:	ptlib-devel
 
 %description devel
 Header files and libraries for developing applications that use
