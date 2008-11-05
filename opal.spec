@@ -114,17 +114,12 @@ OPAL_BUILD="yes"; export OPAL_BUILD
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/opal,%{_bindir},%{_datadir}/%{name}}
+install -d $RPM_BUILD_ROOT%{_bindir}
 
 %{__make} install \
         DESTDIR=$RPM_BUILD_ROOT
 
-# using cp as install won't preserve links
-cp -d lib/lib*.a $RPM_BUILD_ROOT%{_libdir}
-install version.h $RPM_BUILD_ROOT%{_includedir}/opal
-install samples/simple/obj_*/simpleopal $RPM_BUILD_ROOT%{_bindir}
-sed -i -e 's@\$(OPALDIR)/include@&/opal@' \
-       -e 's@\$(OPALDIR)/lib@\$(OPALDIR)/%{_lib}@' $RPM_BUILD_ROOT%{_datadir}/opal/opal_inc.mak
+install samples/simple/obj/simpleopal $RPM_BUILD_ROOT%{_bindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -136,12 +131,27 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
+%dir %{_libdir}/opal-3.4.2
+%dir %{_libdir}/opal-3.4.2/codecs
+%dir %{_libdir}/opal-3.4.2/codecs/audio
+%dir %{_libdir}/opal-3.4.2/codecs/video
+%dir %{_libdir}/opal-3.4.2/lid
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/g726_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/gsm0610_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/gsmamrcodec_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/ilbc_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/ima_adpcm_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/lpc10_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/speex_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h261-vic_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h263-ffmpeg_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/lid/vpb_lid_pwplugin.so
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/*.so
-%{_includedir}/*
-%{_datadir}/%{name}
+%{_includedir}/opal
+%{_pkgconfigdir}/opal.pc
 
 %files static
 %defattr(644,root,root,755)
