@@ -1,4 +1,5 @@
 # TODO:
+#	fix static libname (libopal_s.a)
 #	check why:
 #		checking PTLIB has expat... no
 #		checking PTLIB has vxml... no
@@ -30,6 +31,7 @@ Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.4/%{name}-%{version}.tar.
 Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
 Patch2:		%{name}-ac.patch
+Patch3:		%{name}-build.patch
 URL:		http://www.openh323.org/
 BuildRequires:	SDL-devel
 BuildRequires:	automake
@@ -88,6 +90,7 @@ Biblioteki statyczne OPAL.
 #patch0 -p1
 #patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
@@ -102,10 +105,12 @@ OPAL_BUILD="yes"; export OPAL_BUILD
 	CPLUS="%{__cxx}" \
 	OPTCCFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG}"
 
+%{__cp} -a */libopal* .
 %{__make} -C samples/simple %{?debug:debug}%{!?debug:opt} \
 	CC="%{__cc}" \
 	CPLUS=%{__cxx} \
-	OPTCCFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG}"
+	CFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG} -I`pwd`/include" \
+	LDFLAGS="%{rpmldflags} -L`pwd` -lpt -lopal"
 
 %install
 rm -rf $RPM_BUILD_ROOT
