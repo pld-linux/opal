@@ -14,8 +14,11 @@ Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.4/%{name}-%{version}.tar.
 #Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
 Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
+Patch2:		%{name}-ac.patch
 URL:		http://www.openh323.org/
 BuildRequires:	SDL-devel
+BuildRequires:	automake
+BuildRequires:	autoconf
 BuildRequires:	libstdc++-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
@@ -69,12 +72,15 @@ Biblioteki statyczne OPAL.
 %setup -q
 #patch0 -p1
 #patch1 -p1
+%patch2 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
 OPALDIR=`pwd`; export OPALDIR
 OPAL_BUILD="yes"; export OPAL_BUILD
-%configure 
+%{__aclocal}
+%{__autoconf}
+%configure
 
 %{__make} %{?debug:debug}%{!?debug:opt} \
 	CC="%{__cc}" \
