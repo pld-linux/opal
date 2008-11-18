@@ -1,19 +1,10 @@
 # TODO:
 #	fix static libname (libopal_s.a)
-#	check why:
-#		checking PTLIB has expat... no
-#		checking PTLIB has vxml... no
-#		checking PTLIB has ipv6... no
-#		checking PTLIB has ldap... no
-#	... and check plugin configuration:
-#                              GSM :  yes (internal)
-#                           H.263+ :  
-#                           H.264  :  no
-#                          THEORA  :  no
-#                    MPEG4 Part 2  :  no
-#                     SpanDSP FAX  :  no
-#                            CAPI  :  no
-#           Quicknet xJACK support :  no
+#	IPv6 support requires IPv6 support in ptlib
+#	x264+ffmpeg detection sucks - it doesn't work with --as-needed
+#       SpanDSP FAX support requires t38_indicator symbol
+#	MPEG4 rate control correction requires libavcodec sources
+#       CAPI support
 #
 # Don't touch this! strip removes all symbols from library
 %define		no_install_post_strip		1
@@ -22,7 +13,7 @@ Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	3.4.2
-Release:	0.2
+Release:	0.3
 License:	MPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.4/%{name}-%{version}.tar.bz2
@@ -36,14 +27,20 @@ URL:		http://www.openh323.org/
 BuildRequires:	SDL-devel
 BuildRequires:	automake
 BuildRequires:	autoconf
+BuildRequires:	ffmpeg-devel
+BuildRequires:	libgsm-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	libtheora-devel
+BuildRequires:	libx264-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
-BuildRequires:	ptlib-devel
+BuildRequires:	ptlib-devel >= 2.4.2-3
 BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel >= 1:1.1.5
 %requires_eq	pwlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		filterout_ld    -Wl,--as-needed
 
 %description
 The OPAL project aims to create a full featured, interoperable,
@@ -98,7 +95,8 @@ OPALDIR=`pwd`; export OPALDIR
 OPAL_BUILD="yes"; export OPAL_BUILD
 %{__aclocal}
 %{__autoconf}
-%configure
+%configure \
+	--enable-ixj
 
 %{__make} %{?debug:debug}%{!?debug:opt} \
 	CC="%{__cc}" \
