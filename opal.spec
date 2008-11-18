@@ -37,7 +37,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	ptlib-devel >= 2.4.2-3
 BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel >= 1:1.1.5
-%requires_eq	pwlib
+%requires_eq	ptlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		filterout_ld    -Wl,--as-needed
