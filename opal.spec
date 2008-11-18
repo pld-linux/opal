@@ -142,7 +142,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/lpc10_audio_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/speex_audio_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h261-vic_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h263-1998_video_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h263-ffmpeg_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h264_video_pwplugin_helper
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h264_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/mpeg4-ffmpeg_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/theora_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-3.4.2/lid/ixj_lid_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-3.4.2/lid/vpb_lid_pwplugin.so
 
 %files devel
