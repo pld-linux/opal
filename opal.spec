@@ -12,12 +12,12 @@
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
-Version:	3.4.2
-Release:	0.3
+Version:	3.6.4
+Release:	0.1
 License:	MPL
 Group:		Libraries
-Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.4/%{name}-%{version}.tar.bz2
-# Source0-md5:	a1d11099fa00d77a79dcfe513872e8dc
+Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.6/%{name}-%{version}.tar.bz2
+# Source0-md5:	d894c176818a33d34a04b21386798c4f
 #Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
 Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
@@ -86,7 +86,7 @@ Biblioteki statyczne OPAL.
 %setup -q
 #patch0 -p1
 #patch1 -p1
-%patch2 -p1
+#%patch2 -p1
 %patch3 -p1
 
 %build
@@ -129,27 +129,27 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%dir %{_libdir}/opal-3.4.2
-%dir %{_libdir}/opal-3.4.2/codecs
-%dir %{_libdir}/opal-3.4.2/codecs/audio
-%dir %{_libdir}/opal-3.4.2/codecs/video
-%dir %{_libdir}/opal-3.4.2/lid
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/g726_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/gsm0610_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/gsmamrcodec_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/ilbc_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/ima_adpcm_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/lpc10_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/audio/speex_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h261-vic_video_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h263-1998_video_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h263-ffmpeg_video_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h264_video_pwplugin_helper
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/h264_video_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/mpeg4-ffmpeg_video_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/codecs/video/theora_video_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/lid/ixj_lid_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-3.4.2/lid/vpb_lid_pwplugin.so
+%dir %{_libdir}/opal-%{version}
+%dir %{_libdir}/opal-%{version}/codecs
+%dir %{_libdir}/opal-%{version}/codecs/audio
+%dir %{_libdir}/opal-%{version}/codecs/video
+%dir %{_libdir}/opal-%{version}/lid
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g726_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsm0610_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsmamrcodec_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/ilbc_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/ima_adpcm_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/lpc10_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/speex_audio_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h261-vic_video_pwplugin.so
+#%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h263-1998_video_pwplugin.so
+#%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h263-ffmpeg_video_pwplugin.so
+#%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_video_pwplugin_helper
+#%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_video_pwplugin.so
+#%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/mpeg4-ffmpeg_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/theora_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/lid/ixj_lid_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/lid/vpb_lid_pwplugin.so
 
 %files devel
 %defattr(644,root,root,755)
