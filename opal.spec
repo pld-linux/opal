@@ -12,12 +12,12 @@
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
-Version:	3.6.4
-Release:	0.1
+Version:	3.6.6
+Release:	1
 License:	MPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.6/%{name}-%{version}.tar.bz2
-# Source0-md5:	d894c176818a33d34a04b21386798c4f
+# Source0-md5:	43b363c860780e7f1a0361cfee8f9f4a
 #Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
 Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
@@ -134,6 +134,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/opal-%{version}/codecs/audio
 %dir %{_libdir}/opal-%{version}/codecs/video
 %dir %{_libdir}/opal-%{version}/lid
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g722_audio_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g726_audio_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsm0610_audio_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsmamrcodec_pwplugin.so
@@ -142,11 +143,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/lpc10_audio_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/speex_audio_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h261-vic_video_pwplugin.so
-#%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h263-1998_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h263-1998_video_pwplugin.so
 #%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h263-ffmpeg_video_pwplugin.so
-#%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_video_pwplugin_helper
-#%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_video_pwplugin.so
-#%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/mpeg4-ffmpeg_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_video_pwplugin_helper
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/mpeg4-ffmpeg_video_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/theora_video_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/lid/ixj_lid_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/lid/vpb_lid_pwplugin.so
