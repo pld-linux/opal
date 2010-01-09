@@ -25,8 +25,9 @@ Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
 URL:		http://www.openh323.org/
 BuildRequires:	SDL-devel
-BuildRequires:	automake
 BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	expat-devel
 BuildRequires:	ffmpeg-devel
 BuildRequires:	libgsm-devel
 BuildRequires:	libstdc++-devel
@@ -37,6 +38,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	ptlib-devel >= 2.4.2-3
 BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel >= 1:1.1.5
+BuildRequires:	unixODBC-devel
 %requires_eq	ptlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
