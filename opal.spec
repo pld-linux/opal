@@ -6,6 +6,9 @@
 #	MPEG4 rate control correction requires libavcodec sources
 #       CAPI support
 #
+# Conditional build:
+%bcond_with	sip_fax_only	# Minimal build for t38modem + SIP
+#
 # Don't touch this! strip removes all symbols from library
 %define		no_install_post_strip		1
 #
@@ -13,7 +16,7 @@ Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	3.6.6
-Release:	2
+Release:	3
 License:	MPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.6/%{name}-%{version}.tar.bz2
@@ -24,21 +27,23 @@ Patch1:		%{name}-mak_files.patch
 Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
 URL:		http://www.openh323.org/
-BuildRequires:	SDL-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	expat-devel
-BuildRequires:	ffmpeg-devel
-BuildRequires:	libgsm-devel
 BuildRequires:	libstdc++-devel
-BuildRequires:	libtheora-devel
-BuildRequires:	libx264-devel
-BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
 BuildRequires:	ptlib-devel >= 2.4.2-3
 BuildRequires:	sed >= 4.0
+%if %{without sip_fax_only}
+BuildRequires:	SDL-devel
+BuildRequires:	ffmpeg-devel
+BuildRequires:	libgsm-devel
+BuildRequires:	libtheora-devel
+BuildRequires:	libx264-devel
+BuildRequires:	openssl-devel
 BuildRequires:	speex-devel >= 1:1.1.5
 BuildRequires:	unixODBC-devel
+%endif
 %requires_eq	ptlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -97,8 +102,34 @@ OPALDIR=`pwd`; export OPALDIR
 OPAL_BUILD="yes"; export OPAL_BUILD
 %{__aclocal}
 %{__autoconf}
+# Run  grep '^OPAL_.*=' configure.ac|grep 'yes\|no'  to check current defaults
 %configure \
+%if %{with sip_fax_only}
+	--enable-sip \
+	--enable-t38 \
+	--enable-fax \
+	--enable-statistics \
+	--disable-java \
+	--disable-video \
+	--disable-h323 \
+	--disable-iax \
+	--disable-h224 \
+	--disable-h281 \
+	--disable-sipim \
+	--disable-rfc4103 \
+	--disable-h450 \
+	--disable-h460 \
+	--disable-h501 \
+	--disable-lid \
+	--disable-ivr \
+	--disable-rfc4175 \
+	--disable-aec \
+	--disable-g711plc \
+	--disable-plugins
+%else
 	--enable-ixj
+%endif
+
 
 %{__make} %{?debug:debug}%{!?debug:opt} \
 	CC="%{__cc}" \
@@ -106,11 +137,13 @@ OPAL_BUILD="yes"; export OPAL_BUILD
 	OPTCCFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG}"
 
 %{__cp} -a */libopal* .
+%if %{without sip_fax_only}
 %{__make} -C samples/simple %{?debug:debug}%{!?debug:opt} \
 	CC="%{__cc}" \
 	CPLUS=%{__cxx} \
 	CFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG} -I`pwd`/include" \
 	LDFLAGS="%{rpmldflags} -L`pwd` -lpt -lopal"
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -119,7 +152,9 @@ install -d $RPM_BUILD_ROOT%{_bindir}
 %{__make} install \
         DESTDIR=$RPM_BUILD_ROOT
 
-install samples/simple/obj/simpleopal $RPM_BUILD_ROOT%{_bindir}
+%{!?with_sip_fax_only:install samples/simple/obj/simpleopal $RPM_BUILD_ROOT%{_bindir}}
+
+install opal_{inc,defs}.mak $RPM_BUILD_ROOT%{_includedir}/opal
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -129,8 +164,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
+%if %{without sip_fax_only}
+%attr(755,root,root) %{_bindir}/*
 %dir %{_libdir}/opal-%{version}
 %dir %{_libdir}/opal-%{version}/codecs
 %dir %{_libdir}/opal-%{version}/codecs/audio
@@ -153,6 +189,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/theora_video_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/lid/ixj_lid_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/lid/vpb_lid_pwplugin.so
+%endif
 
 %files devel
 %defattr(644,root,root,755)
