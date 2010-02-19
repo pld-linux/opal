@@ -67,7 +67,7 @@ Summary(pl.UTF-8):	Pliki dla developerów Opal
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	libstdc++-devel
-Requires:	ptlib-devel
+Requires:	ptlib-devel >= 2.6.5-9
 
 %description devel
 Header files and libraries for developing applications that use
