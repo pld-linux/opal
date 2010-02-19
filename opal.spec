@@ -154,6 +154,14 @@ install -d $RPM_BUILD_ROOT%{_bindir}
 
 %{!?with_sip_fax_only:install samples/simple/obj/simpleopal $RPM_BUILD_ROOT%{_bindir}}
 
+# This needs to be done after 'make install'
+sed -i -e \
+'s,^OPALDIR.*=.*$,OPALDIR\t\t\t\t= %{_libdir}/opal-%{version},;'\
+'s,^OPAL_SRCDIR.*=.*$,OPAL_SRCDIR\t\t\t= %{_usrsrc}/debug/opal-%{version},;'\
+'s,^OPAL_INCDIR.*=.*$,OPAL_INCDIR\t\t\t= %{_includedir}/opal,;'\
+'s,^OPAL_LIBDIR.*=.*$,OPAL_LIBDIR\t\t\t= %{_libdir},;' \
+opal_defs.mak
+
 install opal_{inc,defs}.mak $RPM_BUILD_ROOT%{_includedir}/opal
 
 %clean
