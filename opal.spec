@@ -16,7 +16,7 @@ Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	3.6.6
-Release:	5
+Release:	6
 License:	MPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.6/%{name}-%{version}.tar.bz2
@@ -26,9 +26,11 @@ Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
 Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
+Patch4:		%{name}-celt.patch
 URL:		http://www.openh323.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	celt-devel
 BuildRequires:	expat-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
@@ -95,6 +97,7 @@ Biblioteki statyczne OPAL.
 #patch1 -p1
 #%patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
@@ -102,6 +105,10 @@ OPALDIR=`pwd`; export OPALDIR
 OPAL_BUILD="yes"; export OPAL_BUILD
 %{__aclocal}
 %{__autoconf}
+cd plugins
+%{__aclocal}                                                                                                                                                 
+%{__autoconf}
+cd ..
 # Run  grep '^OPAL_.*=' configure.ac|grep 'yes\|no'  to check current defaults
 %configure \
 %if %{with sip_fax_only}
@@ -180,6 +187,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/opal-%{version}/codecs/audio
 %dir %{_libdir}/opal-%{version}/codecs/video
 %dir %{_libdir}/opal-%{version}/lid
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/celtcodec_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g722_audio_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g726_audio_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsm0610_audio_pwplugin.so
