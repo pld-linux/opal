@@ -15,18 +15,17 @@
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
-Version:	3.6.6
-Release:	6
+Version:	3.6.8
+Release:	1
 License:	MPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.6/%{name}-%{version}.tar.bz2
-# Source0-md5:	43b363c860780e7f1a0361cfee8f9f4a
+# Source0-md5:	a5f4ddc12c5aa34dc9407fe1daaf0f45
 #Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
 Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
 Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
-Patch4:		%{name}-celt.patch
 URL:		http://www.openh323.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -34,7 +33,7 @@ BuildRequires:	celt-devel
 BuildRequires:	expat-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
-BuildRequires:	ptlib-devel >= 2.4.2-3
+BuildRequires:	ptlib-devel >= 2.6.6
 BuildRequires:	sed >= 4.0
 %if %{without sip_fax_only}
 BuildRequires:	SDL-devel
@@ -97,7 +96,6 @@ Biblioteki statyczne OPAL.
 #patch1 -p1
 #%patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
@@ -147,7 +145,7 @@ cd ..
 %if %{without sip_fax_only}
 %{__make} -C samples/simple %{?debug:debug}%{!?debug:opt} \
 	CC="%{__cc}" \
-	CPLUS=%{__cxx} \
+	CPLUS="%{__cxx}" \
 	CFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG} -I`pwd`/include" \
 	LDFLAGS="%{rpmldflags} -L`pwd` -lpt -lopal"
 %endif
