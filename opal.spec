@@ -16,7 +16,7 @@ Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	3.6.8
-Release:	2
+Release:	3
 License:	MPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.6/%{name}-%{version}.tar.bz2
@@ -26,6 +26,7 @@ Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
 Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
+Patch4:		%{name}-ffmpeg06.patch
 URL:		http://www.openh323.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -96,6 +97,7 @@ Biblioteki statyczne OPAL.
 #patch1 -p1
 #%patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR

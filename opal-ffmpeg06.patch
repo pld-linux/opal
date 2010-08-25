@@ -1,0 +1,49 @@
+diff -ur opal-3.6.8.orig//plugins/video/common/dyna.h opal-3.6.8/plugins/video/common/dyna.h
+--- opal-3.6.8.orig//plugins/video/common/dyna.h	2010-05-27 08:52:47.000000000 +0200
++++ opal-3.6.8/plugins/video/common/dyna.h	2010-08-25 12:47:40.040727761 +0200
+@@ -41,6 +41,8 @@
+ #ifndef __DYNA_H__
+ #define __DYNA_H__ 1
+ 
++#define __STDC_CONSTANT_MACROS
++
+ #include "plugin-config.h"
+ 
+ #include <codec/opalplugin.h>
+diff -ur opal-3.6.8.orig//plugins/video/H.263-1998/h263-1998.h opal-3.6.8/plugins/video/H.263-1998/h263-1998.h
+--- opal-3.6.8.orig//plugins/video/H.263-1998/h263-1998.h	2010-05-27 08:52:46.000000000 +0200
++++ opal-3.6.8/plugins/video/H.263-1998/h263-1998.h	2010-08-25 12:48:00.781349611 +0200
+@@ -48,6 +48,9 @@
+ 
+ #ifndef __H263P_1998_H__
+ #define __H263P_1998_H__ 1
++
++#define __STDC_CONSTANT_MACROS
++
+ #include <codec/opalplugin.h>
+ #include "h263pframe.h"
+ #include "rfc2190.h"
+diff -ur opal-3.6.8.orig//plugins/video/H.263-1998/h263pframe.h opal-3.6.8/plugins/video/H.263-1998/h263pframe.h
+--- opal-3.6.8.orig//plugins/video/H.263-1998/h263pframe.h	2010-05-27 08:52:46.000000000 +0200
++++ opal-3.6.8/plugins/video/H.263-1998/h263pframe.h	2010-08-25 12:48:22.311139161 +0200
+@@ -23,6 +23,8 @@
+ #ifndef __H263PFrame_H__
+ #define __H263PFrame_H__ 1
+ 
++#define __STDC_CONSTANT_MACROS
++
+ #include "plugin-config.h"
+ 
+ #include <stdint.h>
+diff -ur opal-3.6.8.orig//plugins/video/H.264/h264-x264.h opal-3.6.8/plugins/video/H.264/h264-x264.h
+--- opal-3.6.8.orig//plugins/video/H.264/h264-x264.h	2010-05-27 08:52:46.000000000 +0200
++++ opal-3.6.8/plugins/video/H.264/h264-x264.h	2010-08-25 12:47:19.218239108 +0200
+@@ -39,6 +39,8 @@
+ #ifndef __H264_X264_H__
+ #define __H264_X264_H__ 1
+ 
++#define __STDC_CONSTANT_MACROS
++
+ #include "plugin-config.h"
+ 
+ #include <stdarg.h>
