@@ -16,10 +16,10 @@ Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	3.6.8
-Release:	3
+Release:	4
 License:	MPL
 Group:		Libraries
-Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.6/%{name}-%{version}.tar.bz2
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/opal/3.6/%{name}-%{version}.tar.bz2
 # Source0-md5:	a5f4ddc12c5aa34dc9407fe1daaf0f45
 #Source0:	http://www.ekiga.org/admin/downloads/latest/sources/sources/%{name}-%{version}.tar.gz
 Patch0:		%{name}-libname.patch
@@ -28,9 +28,10 @@ Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
 Patch4:		%{name}-ffmpeg06.patch
 URL:		http://www.openh323.org/
+Requires:	celt <= 0.8.1
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	celt-devel
+BuildRequires:	celt-devel <= 0.8.1
 BuildRequires:	expat-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
@@ -52,9 +53,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		filterout_ld    -Wl,--as-needed
 
 %description
-The OPAL project aims to create a full featured, interoperable,
-Open Source implementation of the ITU H.323 teleconferencing protocol
-that can be used by personal developers and commercial users without
+The OPAL project aims to create a full featured, interoperable, Open
+Source implementation of the ITU H.323 teleconferencing protocol that
+can be used by personal developers and commercial users without
 charge.
 
 %description -l pl.UTF-8
@@ -72,8 +73,7 @@ Requires:	libstdc++-devel
 Requires:	ptlib-devel
 
 %description devel
-Header files and libraries for developing applications that use
-OPAL.
+Header files and libraries for developing applications that use OPAL.
 
 %description devel -l pl.UTF-8
 Pliki nagłówkowe i biblioteki konieczne do rozwoju aplikacji
@@ -106,7 +106,7 @@ OPAL_BUILD="yes"; export OPAL_BUILD
 %{__aclocal}
 %{__autoconf}
 cd plugins
-%{__aclocal}                                                                                                                                                 
+%{__aclocal}
 %{__autoconf}
 cd ..
 # Run  grep '^OPAL_.*=' configure.ac|grep 'yes\|no'  to check current defaults
