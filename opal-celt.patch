@@ -1,0 +1,29 @@
+--- opal-3.6.8/plugins/audio/celt.org/celtcodec.c	2010-05-27 08:52:43.000000000 +0200
++++ opal-3.6.8/plugins/audio/celt/celtcodec.c	2010-11-26 20:34:35.418190801 +0100
+@@ -61,7 +61,7 @@
+     return FALSE;
+   }
+ 
+-  celt_mode_info(celt->mode, CELT_GET_FRAME_SIZE, &celt->frame_size);
++  celt->frame_size = 960; /* default from tools/celtenc.c, is this always correct? */
+   celt->bytes_per_packet = (codec->bitsPerSec * celt->frame_size/codec->sampleRate + 4) / 8;
+ 
+   return TRUE;
+@@ -159,7 +159,7 @@
+ #elif HAVE_CELT_0_5_0_OR_0_6_0
+   byteCount = celt_encode(celt->encoder_state, (celt_int16_t *)fromPtr, NULL, (char *)toPtr, celt->bytes_per_packet);
+ #else
+-  byteCount = celt_encode(celt->encoder_state, (void *)fromPtr, NULL, (unsigned char *)toPtr, celt->bytes_per_packet);
++  byteCount = celt_encode(celt->encoder_state, (void *)fromPtr, celt->frame_size, (unsigned char *)toPtr, celt->bytes_per_packet);
+ #endif
+   if (byteCount < 0) {
+ 	return 0;
+@@ -190,7 +190,7 @@
+ #if defined (HAVE_CELT_0_4_OR_SOONER) || defined (HAVE_CELT_0_5_0_OR_0_6_0)
+   if (celt_decode(celt->decoder_state, (char *)fromPtr, *fromLen, (short *)toPtr) < 0)
+ #else
+-  if (celt_decode(celt->decoder_state, (unsigned char *)fromPtr, *fromLen, (short *)toPtr) < 0)
++  if (celt_decode(celt->decoder_state, (unsigned char *)fromPtr, *fromLen, (short *)toPtr, celt->frame_size) < 0)
+ #endif
+     return 0;
+ 
