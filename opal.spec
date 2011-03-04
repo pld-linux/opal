@@ -142,15 +142,17 @@ cd ..
 
 %{__make} %{?debug:debug}%{!?debug:opt} \
 	CC="%{__cc}" \
+	CXX="%{__cxx}" \
 	CPLUS="%{__cxx}" \
-	OPTCCFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG}"
+	OPTCCFLAGS="%{rpmcppflags} %{rpmcflags} %{!?debug:-DNDEBUG} -I`pwd`/include"
 
 %{__cp} -a */libopal* .
 %if %{without sip_fax_only}
 %{__make} -C samples/simple %{?debug:debug}%{!?debug:opt} \
 	CC="%{__cc}" \
+	CXX="%{__cxx}" \
 	CPLUS="%{__cxx}" \
-	CFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG} -I`pwd`/include" \
+	CFLAGS="%{rpmcppflags} %{rpmcflags} %{!?debug:-DNDEBUG} -I`pwd`/include" \
 	LDFLAGS="%{rpmldflags} -L`pwd` -lpt -lopal"
 %endif
 
