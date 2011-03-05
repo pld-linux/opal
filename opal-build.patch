@@ -17,3 +17,13 @@
  
  vpath	%.o   $(OBJDIR)
  
+--- opal-3.6.8/configure.ac~	2010-05-27 08:53:06.000000000 +0200
++++ opal-3.6.8/configure.ac	2011-03-05 14:53:38.495387275 +0100
+@@ -313,6 +313,7 @@
+ dnl Check for other libraries
+ dnl ########################################################################
+ 
++OPAL_ADD_CFLAGS_LIBS([], [-lcrypto])
+ 
+ dnl     ########################
+ dnl     libdl
