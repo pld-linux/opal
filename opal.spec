@@ -8,6 +8,7 @@
 #
 # Conditional build:
 %bcond_with	sip_fax_only	# Minimal build for t38modem + SIP
+%bcond_without	celt		# Build with CELT codec support
 #
 # Don't touch this! strip removes all symbols from library
 %define		no_install_post_strip		1
@@ -15,26 +16,26 @@
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
-Version:	3.8.2
+Version:	3.8.4
 Release:	0.1
 License:	MPL
 Group:		Libraries
 URL:		http://www.opalvoip.org
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
-# Source0-md5:	dff4204187f4a43ea8c2be376ea6155b
+# Source0-md5:	8128a42c25b6a37fb92d75ebd94333e1
 Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
 Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	celt-devel <= 0.8.1
+%{?with_celt:BuildRequires:	celt-devel <= 0.8.1}
 BuildRequires:	expat-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
-BuildRequires:	ptlib-devel = 2.8.2
+BuildRequires:	ptlib-devel >= 2.8.2
 BuildRequires:	sed >= 4.0
-Requires:	celt <= 0.8.1
+%{?with_celt:Requires:	celt <= 0.8.1}
 %if %{without sip_fax_only}
 BuildRequires:	SDL-devel
 BuildRequires:	ffmpeg-devel
@@ -131,6 +132,7 @@ cd ..
 	--disable-g711plc \
 	--disable-plugins
 %else
+%{!?with_celt:--disable-celt} \
 	--enable-ixj
 %endif
 
@@ -184,7 +186,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/opal-%{version}/codecs/audio
 %dir %{_libdir}/opal-%{version}/codecs/video
 %dir %{_libdir}/opal-%{version}/lid
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/celtcodec_pwplugin.so
+%{?with_celt:%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/celtcodec_pwplugin.so}
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g722_audio_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g726_audio_pwplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsm0610_audio_pwplugin.so
