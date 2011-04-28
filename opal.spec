@@ -6,6 +6,9 @@
 #	MPEG4 rate control correction requires libavcodec sources
 #       CAPI support
 #
+# WARNING: opal version should match Ekiga and ptlib versions
+#	Recommendations: http://wiki.ekiga.org/index.php/Download_Ekiga_sources
+#
 # Conditional build:
 %bcond_with	sip_fax_only	# Minimal build for t38modem + SIP
 #
@@ -16,7 +19,7 @@ Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	3.6.8
-Release:	8
+Release:	9
 License:	MPL
 Group:		Libraries
 Source0:	http://ftp.gnome.org/pub/gnome/sources/opal/3.6/%{name}-%{version}.tar.bz2
@@ -35,7 +38,8 @@ BuildRequires:	celt-devel >= 0.9
 BuildRequires:	expat-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
-BuildRequires:	ptlib-devel >= 2.6.6
+BuildRequires:	ptlib-devel >= 1:2.8.3
+BuildConflicts:	ptlib-devel >= 1:2.10
 BuildRequires:	sed >= 4.0
 %if %{without sip_fax_only}
 BuildRequires:	SDL-devel
