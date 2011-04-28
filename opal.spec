@@ -6,6 +6,9 @@
 #	MPEG4 rate control correction requires libavcodec sources
 #       CAPI support
 #
+# WARNING: opal version should match Ekiga and ptlib versions
+#      Recommendations: http://wiki.ekiga.org/index.php/Download_Ekiga_sources
+#
 # Conditional build:
 %bcond_with	sip_fax_only	# Minimal build for t38modem + SIP
 %bcond_without	celt		# Build with CELT codec support
@@ -33,7 +36,7 @@ BuildRequires:	automake
 BuildRequires:	expat-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
-BuildRequires:	ptlib-devel >= 2.8.2
+BuildRequires:	ptlib-devel >= 1:2.8.3
 BuildRequires:	sed >= 4.0
 %{?with_celt:Requires:	celt <= 0.8.1}
 %if %{without sip_fax_only}
