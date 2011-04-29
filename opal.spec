@@ -156,7 +156,7 @@ cd ..
 	CC="%{__cc}" \
 	CXX="%{__cxx}" \
 	CPLUS="%{__cxx}" \
-	CFLAGS="%{rpmcppflags} %{rpmcflags} %{!?debug:-DNDEBUG} -I`pwd`/include" \
+	CFLAGS="%{rpmcppflags} %{rpmcflags} `ptlib-config --ccflags` %{!?debug:-DNDEBUG} -I`pwd`/include" \
 	LDFLAGS="%{rpmldflags} -L`pwd` -lpt -lopal"
 %endif
 
