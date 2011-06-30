@@ -1,0 +1,178 @@
+Index: opal-3.6.8/plugins/configure.ac
+===================================================================
+--- opal-3.6.8.orig/plugins/configure.ac
++++ opal-3.6.8/plugins/configure.ac
+@@ -237,9 +237,9 @@ PKG_CHECK_MODULES([LIBAVCODEC],
+                                          HAVE_H264_DECODER=yes
+                                          ;;
+                                      * ) 
+-                                         AC_CHECK_LIB(avcodec, h263p_encoder, [HAVE_H263P=yes], [HAVE_H263P=no])
+-                                         AC_CHECK_LIB(avcodec, mpeg4_encoder, [HAVE_MPEG4=yes], [HAVE_MPEG4=no])
+-                                         AC_CHECK_LIB(avcodec, h264_decoder, [HAVE_H264_DECODER=yes], [HAVE_H264_DECODER=no])
++                                         OPAL_CODEC_CHECK(HAVE_H263P, encoder, CODEC_ID_H263P)
++                                         OPAL_CODEC_CHECK(HAVE_MPEG4, encoder, CODEC_ID_MPEG4)
++                                         OPAL_CODEC_CHECK(HAVE_H264_DECODER, decoder, CODEC_ID_H264)
+                                          ;;
+                    esac
+                    AC_SUBST(HAVE_H263P)
+Index: opal-3.6.8/plugins/video/common/dyna.cxx
+===================================================================
+--- opal-3.6.8.orig/plugins/video/common/dyna.cxx
++++ opal-3.6.8/plugins/video/common/dyna.cxx
+@@ -240,43 +240,7 @@ bool FFMPEGLibrary::Load(int ver)
+     return false;
+   }
+ 
+-  if (_codec==CODEC_ID_H264) {
+-    if (!libAvcodec.GetFunction("h264_decoder", (DynaLink::Function &)Favcodec_h264_decoder)) {
+-      TRACE (1, _codecString << "\tDYNA\tFailed to load h264_decoder");
+-      return false;
+-    }
+-  }
+-  
+-  if (_codec==CODEC_ID_H263P) {
+-    if (!libAvcodec.GetFunction("h263_encoder", (DynaLink::Function &)Favcodec_h263_encoder)) {
+-      TRACE (1, _codecString << "\tDYNA\tFailed to load h263_encoder" );
+-      return false;
+-    }
+-  
+-    if (!libAvcodec.GetFunction("h263p_encoder", (DynaLink::Function &)Favcodec_h263p_encoder)) {
+-      TRACE (1, _codecString << "\tDYNA\tFailed to load h263p_encoder" );
+-      return false;
+-    }
+-
+-    if (!libAvcodec.GetFunction("h263_decoder", (DynaLink::Function &)Favcodec_h263_decoder)) {
+-      TRACE (1, _codecString << "\tDYNA\tFailed to load h263_decoder" );
+-      return false;
+-    }
+-  }
+-
+-  if (_codec==CODEC_ID_MPEG4) {
+-    if (!libAvcodec.GetFunction("mpeg4_encoder", (DynaLink::Function &)mpeg4_encoder)) {
+-      TRACE (1, _codecString << "\tDYNA\tFailed to load mpeg4_encoder");
+-      return false;
+-    }
+-
+-    if (!libAvcodec.GetFunction("mpeg4_decoder", (DynaLink::Function &)mpeg4_decoder)) {
+-      TRACE (1, _codecString << "\tDYNA\tFailed to load mpeg4_decoder");
+-      return false;
+-    }
+-  }
+-
+-  if (!libAvcodec.GetFunction("register_avcodec", (DynaLink::Function &)Favcodec_register)) {
++  if (!libAvcodec.GetFunction("avcodec_register_all", (DynaLink::Function &)Favcodec_register_all)) {
+     TRACE (1, _codecString << "\tDYNA\tFailed to load register_avcodec");
+     return false;
+   }
+@@ -370,20 +334,13 @@ bool FFMPEGLibrary::Load(int ver)
+     }
+ 
+     Favcodec_init();
++    Favcodec_register_all();
+ 
+-    // register only the codecs needed (to have smaller code)
+-    if (_codec==CODEC_ID_H264) 
+-      Favcodec_register(Favcodec_h264_decoder);
+-
+-    if (_codec==CODEC_ID_H263P) {
+-      Favcodec_register(Favcodec_h263_encoder);
+-      Favcodec_register(Favcodec_h263p_encoder);
+-      Favcodec_register(Favcodec_h263_decoder);
+-    }
+-
+-    if (_codec==CODEC_ID_MPEG4) {
+-      Favcodec_register(mpeg4_encoder);
+-      Favcodec_register(mpeg4_decoder);
++    /* check for the codec */
++    if (Favcodec_find_decoder(_codec) == NULL &&
++	Favcodec_find_encoder(_codec) == NULL) {
++      TRACE (1, _codecString << "\tDYNA\tFailed to load codec");
++      return false;
+     }
+ 
+     if (FFCheckAlignment() != 0) {
+Index: opal-3.6.8/plugins/video/common/dyna.h
+===================================================================
+--- opal-3.6.8.orig/plugins/video/common/dyna.h
++++ opal-3.6.8/plugins/video/common/dyna.h
+@@ -187,14 +187,8 @@ class FFMPEGLibrary
+     char _codecString [32];
+ 
+     void (*Favcodec_init)(void);
+-    AVCodec *Favcodec_h263_encoder;
+-    AVCodec *Favcodec_h263p_encoder;
+-    AVCodec *Favcodec_h263_decoder;
+-    AVCodec *Favcodec_h264_decoder;
+-    AVCodec *mpeg4_encoder;
+-    AVCodec *mpeg4_decoder;
+ 
+-    void (*Favcodec_register)(AVCodec *format);
++    void (*Favcodec_register_all)(void);
+     AVCodec *(*Favcodec_find_encoder)(enum CodecID id);
+     AVCodec *(*Favcodec_find_decoder)(enum CodecID id);
+     AVCodecContext *(*Favcodec_alloc_context)(void);
+Index: opal-3.6.8/opal.m4
+===================================================================
+--- opal-3.6.8.orig/opal.m4
++++ opal-3.6.8/opal.m4
+@@ -1055,3 +1055,26 @@ AC_DEFUN([OPAL_DETERMINE_ILBC],
+ 					OPAL_MSG_CHECK([System iLBC], [$has_ilbc])
+ 				fi
+       ])
++
++dnl OPAL_CODEC_CHECK
++dnl check for a codec presence in ffmpeg
++dnl Arguments: $1 name of configure option
++dnl 	       $2 'encode' or 'decode'
++dnl 	       $3 name of codec to check for (define in ffmpeg)
++AC_DEFUN([OPAL_CODEC_CHECK],
++	 [
++	  AC_MSG_CHECKING(checking for codec $3 in libavcodec)
++	  AC_LANG([C])
++	  LIBS=-lavcodec
++	  AC_RUN_IFELSE(
++	    [AC_LANG_PROGRAM([[
++				#include <libavcodec/avcodec.h>
++			     ]],
++			     [[
++			       avcodec_init();
++			       avcodec_register_all();
++			       return avcodec_find_$2($3) == NULL;
++			     ]]
++	    )], [$1=yes], [$1=no], [$1=no])
++	  AC_MSG_RESULT($$1)
++	  ])
+diff --git a/include/h323/h323ep.h b/include/h323/h323ep.h
+--- a/include/h323/h323ep.h
++++ b/include/h323/h323ep.h
+@@ -60,6 +60,7 @@ class H225_H221NonStandard;
+ class H225_H221NonStandard;
+ class H225_ServiceControlDescriptor;
+ class H225_FeatureSet;
++class H225_ArrayOf_SupportedProtocols;
+ 
+ class H235SecurityInfo;
+ 
+diff --git a/plugins/video/H.264/shared/h264frame.cxx b/plugins/video/H.264/shared/h264frame.cxx
+--- a/plugins/video/H.264/shared/h264frame.cxx
++++ b/plugins/video/H.264/shared/h264frame.cxx
+@@ -86,7 +86,6 @@ H264Frame::~H264Frame ()
+ 
+ #ifndef LICENCE_MPL
+ void H264Frame::SetFromFrame (x264_nal_t *NALs, int numberOfNALs) {
+-  int vopBufferLen;
+   int currentNAL = 0;
+ 
+   uint8_t* currentPositionInFrame=(uint8_t*) _encodedFrame;
+@@ -99,8 +98,9 @@ void H264Frame::SetFromFrame (x264_nal_t
+ 
+   // read the nals out of the encoder and create meta data about their location and size in the frame
+   for (currentNAL = 0; currentNAL < numberOfNALs; currentNAL++) {
+-    int currentNALLen;
+-    currentNALLen = X264_NAL_ENCODE(currentPositionInFrame, &vopBufferLen, 1, &NALs[currentNAL]);
++    int currentNALLen = NALs[currentNAL].i_payload;
++    memcpy(currentPositionInFrame, NALs[currentNAL].p_payload, NALs[currentNAL].i_payload);
++
+     if (currentNALLen > 0) 
+     {
+       _NALs[_numberOfNALsInFrame].length = currentNALLen;
