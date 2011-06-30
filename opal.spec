@@ -31,6 +31,7 @@ Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
 Patch4:		%{name}-ffmpeg06.patch
 Patch5:		%{name}-celt.patch
+Patch6:		%{name}-ffmpeg08.patch
 URL:		http://www.openh323.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -104,6 +105,7 @@ Biblioteki statyczne OPAL.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
