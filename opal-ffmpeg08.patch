@@ -176,3 +176,23 @@ diff --git a/plugins/video/H.264/shared/h264frame.cxx b/plugins/video/H.264/shar
      if (currentNALLen > 0) 
      {
        _NALs[_numberOfNALsInFrame].length = currentNALLen;
+--- opal-3.6.8/plugins/video/H.263-1998/h263-1998.cxx~	2010-05-27 08:52:46.000000000 +0200
++++ opal-3.6.8/plugins/video/H.263-1998/h263-1998.cxx	2011-06-30 16:50:50.842457173 +0200
+@@ -688,7 +688,7 @@
+ 
+   _inputFrame->data[1] = _inputFrame->data[0] + size;
+   _inputFrame->data[2] = _inputFrame->data[1] + (size / 4);
+-  _inputFrame->pict_type = (flags && forceIFrame) ? FF_I_TYPE : 0;
++  _inputFrame->pict_type = (flags && forceIFrame) ? AV_PICTURE_TYPE_I : 0;
+ 
+   currentMb = 0;
+   currentBytes = 0;
+@@ -885,7 +885,7 @@
+   _inputFrame->data[0] = _inputFrameBuffer + FF_INPUT_BUFFER_PADDING_SIZE;
+   _inputFrame->data[1] = _inputFrame->data[0] + size;
+   _inputFrame->data[2] = _inputFrame->data[1] + (size / 4);
+-  _inputFrame->pict_type = (flags && forceIFrame) ? FF_I_TYPE : 0;
++  _inputFrame->pict_type = (flags && forceIFrame) ? AV_PICTURE_TYPE_I : 0;
+  
+   _txH263PFrame->BeginNewFrame();
+   _txH263PFrame->SetTimestamp(srcRTP.GetTimestamp());
