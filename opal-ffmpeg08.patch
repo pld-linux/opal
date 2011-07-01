@@ -183,7 +183,7 @@ diff --git a/plugins/video/H.264/shared/h264frame.cxx b/plugins/video/H.264/shar
    _inputFrame->data[1] = _inputFrame->data[0] + size;
    _inputFrame->data[2] = _inputFrame->data[1] + (size / 4);
 -  _inputFrame->pict_type = (flags && forceIFrame) ? FF_I_TYPE : 0;
-+  _inputFrame->pict_type = (flags && forceIFrame) ? AV_PICTURE_TYPE_I : 0;
++  _inputFrame->pict_type = AV_PICTURE_TYPE_I;
  
    currentMb = 0;
    currentBytes = 0;
@@ -192,7 +192,7 @@ diff --git a/plugins/video/H.264/shared/h264frame.cxx b/plugins/video/H.264/shar
    _inputFrame->data[1] = _inputFrame->data[0] + size;
    _inputFrame->data[2] = _inputFrame->data[1] + (size / 4);
 -  _inputFrame->pict_type = (flags && forceIFrame) ? FF_I_TYPE : 0;
-+  _inputFrame->pict_type = (flags && forceIFrame) ? AV_PICTURE_TYPE_I : 0;
++  _inputFrame->pict_type = AV_PICTURE_TYPE_I;
   
    _txH263PFrame->BeginNewFrame();
    _txH263PFrame->SetTimestamp(srcRTP.GetTimestamp());
