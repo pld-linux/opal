@@ -44,7 +44,7 @@ BuildConflicts:	ptlib-devel >= 1:2.10
 BuildRequires:	sed >= 4.0
 %if %{without sip_fax_only}
 BuildRequires:	SDL-devel
-BuildRequires:	ffmpeg-devel
+BuildRequires:	ffmpeg-devel >= 0.7.1
 BuildRequires:	libgsm-devel
 BuildRequires:	libtheora-devel
 BuildRequires:	libx264-devel
