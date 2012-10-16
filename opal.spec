@@ -26,9 +26,6 @@ Group:		Libraries
 URL:		http://www.opalvoip.org
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	b4907073e00889a9e7c6c49d41e4e2d4
-Patch0:		%{name}-libname.patch
-Patch1:		%{name}-mak_files.patch
-Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
 Patch4:		opal-3.10.8-svn-revision.patch
 BuildRequires:	autoconf
@@ -96,9 +93,6 @@ Biblioteki statyczne OPAL.
 
 %prep
 %setup -q
-#patch0 -p1
-#patch1 -p1
-#patch2 -p1
 %patch3 -p1
 %patch4 -p1
 
