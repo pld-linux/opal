@@ -1,11 +1,11 @@
 --- opal-3.4.2/samples/simple/Makefile.orig	2008-11-05 17:42:13.403269358 +0100
 +++ opal-3.4.2/samples/simple/Makefile	2008-11-05 17:58:28.336264433 +0100
 @@ -53,13 +53,13 @@
- endif
- # Get required flags from library
  
+ # The -I option allows to build the simple application in the same time as opal
+ # (as used by distribution packagers)
 -CFLAGS += $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config $(PKG_FLAGS) --cflags opal) -I../../include
--LDFLAGS += $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config $(PKG_FLAGS) --libs opal) -L ../../lib*
+-LDFLAGS += $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config $(PKG_FLAGS) --libs opal)
 +CFLAGS += 
 +LDFLAGS += 
  
