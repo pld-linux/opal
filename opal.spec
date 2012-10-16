@@ -20,14 +20,14 @@ Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	3.10.8
-Release:	0.1
+Release:	1
 License:	MPL
 Group:		Libraries
 URL:		http://www.opalvoip.org
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	b4907073e00889a9e7c6c49d41e4e2d4
-Patch3:		%{name}-build.patch
-Patch4:		opal-3.10.8-svn-revision.patch
+Patch0:		%{name}-build.patch
+Patch1:		opal-3.10.8-svn-revision.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_celt:BuildRequires:	celt-devel}
@@ -93,8 +93,8 @@ Biblioteki statyczne OPAL.
 
 %prep
 %setup -q
-%patch3 -p1
-%patch4 -p1
+%patch0 -p1
+%patch1 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
