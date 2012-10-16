@@ -17,3 +17,22 @@
  
  vpath	%.o   $(OBJDIR)
  
+--- opal-3.10.8/plugins/LID/IxJ/Makefile.in~	2012-10-05 08:19:44.000000000 +0200
++++ opal-3.10.8/plugins/LID/IxJ/Makefile.in	2012-10-16 22:15:37.582438492 +0200
+@@ -31,7 +31,6 @@
+ #
+ #
+ 
+-STDCCFLAGS =@STDCCFLAGS@
+ CXXFLAGS   =@CXXFLAGS@
+ 
+ LID_PLUGIN_DIR=@LID_PLUGIN_DIR@
+@@ -65,7 +64,7 @@
+ 
+ $(OBJDIR)/%.o : %.cxx
+ 	@mkdir -p $(OBJDIR) >/dev/null 2>&1
+-	$(Q_CC)$(CXX) -I../../../include $(STDCCFLAGS) $(OPTCCFLAGS) $(CXXFLAGS) -c $< -o $@
++	$(Q_CC)$(CXX) -I../../../include $(OPTCCFLAGS) $(CXXFLAGS) -c $< -o $@
+ 
+ PLUGIN	= ./ixj_lid_pwplugin.so
+ 

@@ -30,15 +30,16 @@ Patch0:		%{name}-libname.patch
 Patch1:		%{name}-mak_files.patch
 Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
+Patch4:		opal-3.10.8-svn-revision.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{?with_celt:BuildRequires:	celt-devel <= 0.8.1}
+%{?with_celt:BuildRequires:	celt-devel}
 BuildRequires:	expat-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
-BuildRequires:	ptlib-devel >= 1:2.8.3
+BuildRequires:	ptlib-devel >= 1:2.10.8
 BuildRequires:	sed >= 4.0
-%{?with_celt:Requires:	celt <= 0.8.1}
+%{?with_celt:Requires:	celt}
 %if %{without sip_fax_only}
 BuildRequires:	SDL-devel
 BuildRequires:	ffmpeg-devel
@@ -99,6 +100,7 @@ Biblioteki statyczne OPAL.
 #patch1 -p1
 #patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
@@ -138,7 +140,6 @@ cd ..
 %{!?with_celt:--disable-celt} \
 	--enable-ixj
 %endif
-
 
 %{__make} %{?debug:debug}%{!?debug:opt} \
 	CC="%{__cc}" \
@@ -189,24 +190,26 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/opal-%{version}/codecs/audio
 %dir %{_libdir}/opal-%{version}/codecs/video
 %dir %{_libdir}/opal-%{version}/lid
-%{?with_celt:%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/celtcodec_pwplugin.so}
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g722_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g726_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsm0610_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsmamrcodec_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/ilbc_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/ima_adpcm_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/lpc10_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/speex_audio_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h261-vic_video_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h263-1998_video_pwplugin.so
-#%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h263-ffmpeg_video_pwplugin.so
+%{?with_celt:%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/celt_ptplugin.so}
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g722_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g7221_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g7222_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g726_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsm0610_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsmamrcodec_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/iLBC_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/ima_adpcm_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/lpc10_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/silk_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/speex_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h261_vic_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h263_ffmpeg_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_video_pwplugin_helper
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_video_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/mpeg4-ffmpeg_video_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/theora_video_pwplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_x264_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/mpeg4_ffmpeg_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/theora_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/lid/ixj_lid_pwplugin.so
-%attr(755,root,root) %{_libdir}/opal-%{version}/lid/vpb_lid_pwplugin.so
+#%attr(755,root,root) %{_libdir}/opal-%{version}/lid/vpb_lid_pwplugin.so
 %endif
 
 %files devel
