@@ -89,3 +89,21 @@ diff -Naur opal-3.10.7.orig/plugins/video/MPEG4-ffmpeg/mpeg4.cxx opal-3.10.7/plu
              const uint8_t badflags = AC_ERROR | DC_ERROR | MV_ERROR;
              for (int i = 0; i < s->mb_num && errors < threshold; ++i) {
                  if (s->error_status_table[s->mb_index2xy[i]] & badflags)
+--- opal-3.10.8/plugins/video/H.264/h264-x264.cxx.orig	2012-10-05 08:19:40.000000000 +0200
++++ opal-3.10.8/plugins/video/H.264/h264-x264.cxx	2012-11-19 12:41:41.265765218 +0100
+@@ -1071,13 +1071,11 @@
+         return false;
+ 
+       m_context->workaround_bugs = FF_BUG_AUTODETECT;
+-      m_context->error_recognition = FF_ER_AGGRESSIVE;
++      m_context->err_recognition = AV_EF_AGGRESSIVE;
+       m_context->idct_algo = FF_IDCT_H264;
+       m_context->error_concealment = FF_EC_GUESS_MVS | FF_EC_DEBLOCK;
+       m_context->flags = CODEC_FLAG_INPUT_PRESERVED | CODEC_FLAG_EMU_EDGE;
+-      m_context->flags2 = CODEC_FLAG2_BRDO |
+-                          CODEC_FLAG2_MEMC_ONLY |
+-                          CODEC_FLAG2_DROP_FRAME_TIMECODE |
++      m_context->flags2 = CODEC_FLAG2_DROP_FRAME_TIMECODE |
+                           CODEC_FLAG2_SKIP_RD |
+                           CODEC_FLAG2_CHUNKS;
+ 
