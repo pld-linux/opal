@@ -1,0 +1,91 @@
+Submitted By: Bruce Dubbs <bdubbs at linuxfromscratch dot org>
+Date: 2012-01-17
+Initial Package Version: 3.10.2
+Rediffed for 3.10.7 on 2012-10-28
+Upstream Status: Not applied, supposedly fixed by a change to configure.
+Origin: http://sourceforge.net/tracker/index.php?func=detail&aid=3369480&group_id=204472&atid=989750
+Modified by: Andy Benton
+Modified by: Ken Moffat <ken at linuxfromscratch dot org>
+Description: Fixes compiling with recent releases of ffmpeg.
+
+diff -Naur opal-3.10.7.orig/plugins/video/H.263-1998/h263-1998.cxx opal-3.10.7/plugins/video/H.263-1998/h263-1998.cxx
+--- opal-3.10.7.orig/plugins/video/H.263-1998/h263-1998.cxx	2012-08-23 02:18:42.000000000 +0000
++++ opal-3.10.7/plugins/video/H.263-1998/h263-1998.cxx	2012-10-29 04:02:50.000000000 +0000
+@@ -60,6 +60,10 @@
+ #include "rfc2190.h"
+ #include "rfc2429.h"
+ 
++#ifndef CODEC_FLAG_H263P_UMV
++#define CODEC_FLAG_H263P_UMV      0x02000000
++#endif
++
+ 
+ static const char YUV420PDesc[]  = { "YUV420P" };
+ static const char h263PDesc[]    = { "H.263plus" };
+@@ -335,6 +339,19 @@
+   }
+ #endif
+ 
++#ifndef CODEC_FLAG_OBMC
++#define CODEC_FLAG_OBMC           0x00000001
++#endif
++#ifndef CODEC_FLAG_H263P_AIV
++#define CODEC_FLAG_H263P_AIV      0x00000008
++#endif
++#ifndef CODEC_FLAG_H263P_UMV
++#define CODEC_FLAG_H263P_UMV      0x02000000
++#endif
++#ifndef CODEC_FLAG_H263P_SLICE_STRUCT
++#define CODEC_FLAG_H263P_SLICE_STRUCT 0x10000000
++#endif
++
+   if (STRCMPI(option, H263_ANNEX_I) == 0) {
+     // Annex I: Advanced Intra Coding
+     // Level 3+
+@@ -521,7 +538,7 @@
+ 
+     // Need to copy to local buffer to guarantee 16 byte alignment
+     memcpy(m_inputFrame->data[0], OPAL_VIDEO_FRAME_DATA_PTR(header), header->width*header->height*3/2);
+-    m_inputFrame->pict_type = (flags & PluginCodec_CoderForceIFrame) ? FF_I_TYPE : AV_PICTURE_TYPE_NONE;
++    m_inputFrame->pict_type = (flags & PluginCodec_CoderForceIFrame) ? AV_PICTURE_TYPE_I : AV_PICTURE_TYPE_NONE;
+ 
+     /*
+     m_inputFrame->pts = (int64_t)srcRTP.GetTimestamp()*m_context->time_base.den/m_context->time_base.num/VIDEO_CLOCKRATE;
+diff -Naur opal-3.10.7.orig/plugins/video/MPEG4-ffmpeg/mpeg4.cxx opal-3.10.7/plugins/video/MPEG4-ffmpeg/mpeg4.cxx
+--- opal-3.10.7.orig/plugins/video/MPEG4-ffmpeg/mpeg4.cxx	2012-08-23 02:18:44.000000000 +0000
++++ opal-3.10.7/plugins/video/MPEG4-ffmpeg/mpeg4.cxx	2012-10-29 03:49:41.000000000 +0000
+@@ -538,6 +538,16 @@
+ // unchanged through the duration of the encoding context.
+ //
+ 
++#ifndef CODEC_FLAG_H263P_UMV
++#define CODEC_FLAG_H263P_UMV      0x02000000
++#endif
++#ifndef CODEC_FLAG_H263P_SLICE_STRUCT
++#define CODEC_FLAG_H263P_SLICE_STRUCT 0x10000000
++#endif
++#ifndef CODEC_FLAG_PART
++#define CODEC_FLAG_PART   0x0080
++#endif
++
+ void MPEG4EncoderContext::SetStaticEncodingParams(){
+     m_avcontext->pix_fmt = PIX_FMT_YUV420P;
+     m_avcontext->mb_decision = FF_MB_DECISION_SIMPLE;    // high quality off
+@@ -804,7 +814,7 @@
+         // Should the next frame be an I-Frame?
+         if ((flags & PluginCodec_CoderForceIFrame) || (m_frameNum == 0))
+         {
+-            m_avpicture->pict_type = FF_I_TYPE;
++            m_avpicture->pict_type = AV_PICTURE_TYPE_I;
+         }
+         else // No IFrame requested, let avcodec decide what to do
+         {
+@@ -1339,7 +1349,7 @@
+     if (m_doError) {
+         int errors = 0;
+         MpegEncContext *s = (MpegEncContext *) m_avcontext->priv_data;
+-        if (s->error_count && m_avcontext->coded_frame->pict_type == FF_I_TYPE) {
++        if (s->error_count && m_avcontext->coded_frame->pict_type == AV_PICTURE_TYPE_I) {
+             const uint8_t badflags = AC_ERROR | DC_ERROR | MV_ERROR;
+             for (int i = 0; i < s->mb_num && errors < threshold; ++i) {
+                 if (s->error_status_table[s->mb_index2xy[i]] & badflags)

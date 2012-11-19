@@ -27,7 +27,8 @@ URL:		http://www.opalvoip.org
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	b4907073e00889a9e7c6c49d41e4e2d4
 Patch0:		%{name}-build.patch
-Patch1:		opal-3.10.8-svn-revision.patch
+Patch1:		%{name}-3.10.8-svn-revision.patch
+Patch2:		%{name}-ffmpeg10.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_celt:BuildRequires:	celt-devel}
@@ -96,6 +97,7 @@ Biblioteki statyczne OPAL.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
