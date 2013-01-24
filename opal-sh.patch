@@ -1,0 +1,188 @@
+--- opal-3.10.9/plugins/configure.ac.orig	2012-11-26 11:48:31.000000000 +0100
++++ opal-3.10.9/plugins/configure.ac	2013-01-20 17:38:22.322544339 +0100
+@@ -158,7 +158,7 @@
+ fi
+ if test "x${HAVE_GSM0610}" = "xyes" ; then
+   AC_CONFIG_FILES(audio/GSM0610/Makefile)
+-  SUBDIRS+=" audio/GSM0610"
++  SUBDIRS="$SUBDIRS audio/GSM0610"
+ 
+   AC_ARG_ENABLE([localgsm],
+                 [AC_HELP_STRING([--enable-localgsm],[Force use local version of GSM library rather than system version])],
+@@ -208,7 +208,7 @@
+ fi
+ if test "x${HAVE_GSMAMR}" = "xyes" ; then
+   AC_CONFIG_FILES(audio/gsm-amr/Makefile)
+-  SUBDIRS+=" audio/gsm-amr"
++  SUBDIRS="$SUBDIRS audio/gsm-amr"
+ fi
+ 
+ dnl #########
+@@ -223,7 +223,7 @@
+ fi
+ if test "x${HAVE_iLBC}" = "xyes" ; then
+   AC_CONFIG_FILES(audio/iLBC/Makefile)
+-  SUBDIRS+=" audio/iLBC"
++  SUBDIRS="$SUBDIRS audio/iLBC"
+ 
+   OPAL_DETERMINE_ILBC()
+   AC_SUBST(ILBC_SYSTEM)
+@@ -244,7 +244,7 @@
+ if test "x${HAVE_SPEEX}" = "xyes" ; then
+   AC_OUTPUT(audio/Speex/libspeex/speex_config_types.h)
+   AC_CONFIG_FILES(audio/Speex/Makefile)
+-  SUBDIRS+=" audio/Speex"
++  SUBDIRS="$SUBDIRS audio/Speex"
+ 
+   OPAL_SPEEX_TYPES()
+   AC_SUBST(SIZE16)
+@@ -267,7 +267,7 @@
+ fi
+ if test "x${HAVE_G722}" = "xyes" ; then
+   AC_CONFIG_FILES(audio/G722/Makefile)
+-  SUBDIRS+=" audio/G722"
++  SUBDIRS="$SUBDIRS audio/G722"
+ fi
+ 
+ dnl #########
+@@ -282,7 +282,7 @@
+ fi
+ if test "x${HAVE_G7221}" = "xyes" ; then
+   AC_CONFIG_FILES(audio/G.722.1/Makefile)
+-  SUBDIRS+=" audio/G.722.1"
++  SUBDIRS="$SUBDIRS audio/G.722.1"
+ fi
+ 
+ dnl #########
+@@ -297,7 +297,7 @@
+ fi
+ if test "x${HAVE_G7222}" = "xyes" ; then
+   AC_CONFIG_FILES(audio/G.722.2/Makefile)
+-  SUBDIRS+=" audio/G.722.2"
++  SUBDIRS="$SUBDIRS audio/G.722.2"
+ fi
+ 
+ dnl #########
+@@ -312,7 +312,7 @@
+ fi
+ if test "x${HAVE_G726}" = "xyes" ; then
+   AC_CONFIG_FILES(audio/G726/Makefile)
+-  SUBDIRS+=" audio/G726"
++  SUBDIRS="$SUBDIRS audio/G726"
+ fi
+ 
+ dnl #########
+@@ -327,7 +327,7 @@
+ fi
+ if test "x${HAVE_LPC10}" = "xyes" ; then
+   AC_CONFIG_FILES(audio/LPC_10/Makefile)
+-  SUBDIRS+=" audio/LPC_10"
++  SUBDIRS="$SUBDIRS audio/LPC_10"
+ fi
+ 
+ dnl #########
+@@ -342,7 +342,7 @@
+ fi
+ if test "x${HAVE_IMA_ADPCM}" = "xyes" ; then
+   AC_CONFIG_FILES(audio/IMA_ADPCM/Makefile)
+-  SUBDIRS+=" audio/IMA_ADPCM"
++  SUBDIRS="$SUBDIRS audio/IMA_ADPCM"
+ fi
+ 
+ dnl #########
+@@ -362,7 +362,7 @@
+ fi
+ if test "x${HAVE_SBC}" = "xyes" ; then
+   AC_CONFIG_FILES(audio/SBC/Makefile)
+-  SUBDIRS+=" audio/SBC"
++  SUBDIRS="$SUBDIRS audio/SBC"
+ fi
+ 
+ dnl #########
+@@ -388,7 +388,7 @@
+   CELT_CFLAGS="${CELT_CFLAGS} -DCELT_VERSION=\"`pkg-config --modversion celt | \
+                   sed -e "s/\./*10000+/" -e "s/\./*100+/"`\""
+   AC_CONFIG_FILES(audio/celt/Makefile)
+-  SUBDIRS+=" audio/celt"
++  SUBDIRS="$SUBDIRS audio/celt"
+ fi
+ 
+ dnl #########
+@@ -403,7 +403,7 @@
+ fi
+ if test "x${HAVE_SILK}" = "xyes" ; then
+   AC_CONFIG_FILES(audio/SILK/Makefile)
+-  SUBDIRS+=" audio/SILK"
++  SUBDIRS="$SUBDIRS audio/SILK"
+ fi
+ 
+ 
+@@ -421,7 +421,7 @@
+ fi
+ if test "x${HAVE_H261}" = "xyes" ; then
+   AC_CONFIG_FILES(video/H.261-vic/Makefile)
+-  SUBDIRS+=" video/H.261-vic"
++  SUBDIRS="$SUBDIRS video/H.261-vic"
+ fi
+ 
+ 
+@@ -534,12 +534,12 @@
+ 
+ if test "x${HAVE_LIBAVCODEC}" = "xyes"; then
+   AC_CONFIG_FILES(video/H.263-1998/Makefile)
+-  SUBDIRS+=" video/H.263-1998"
++  SUBDIRS="$SUBDIRS video/H.263-1998"
+ fi
+ 
+ if test "x${HAVE_LIBAVCODEC}" = "xyes"; then
+   AC_CONFIG_FILES(video/MPEG4-ffmpeg/Makefile)
+-  SUBDIRS+=" video/MPEG4-ffmpeg"
++  SUBDIRS="$SUBDIRS video/MPEG4-ffmpeg"
+ fi
+ 
+ 
+@@ -577,7 +577,7 @@
+                 [AC_HELP_STRING([--enable-x264-licensed],[enable commercially licensed x264 support])],
+                 [IS_H264_LICENSED=$enableval])
+ 
+-  SUBDIRS+=" video/H.264"
++  SUBDIRS="$SUBDIRS video/H.264"
+   AC_CONFIG_FILES(video/H.264/Makefile)
+   AC_CONFIG_FILES(video/H.264/gpl/Makefile)
+ fi
+@@ -605,7 +605,7 @@
+ fi
+ if test "x$HAVE_THEORA" = "xyes" ; then
+   AC_CONFIG_FILES(video/THEORA/Makefile)
+-  SUBDIRS+=" video/THEORA"
++  SUBDIRS="$SUBDIRS video/THEORA"
+ fi
+ 
+ 
+@@ -639,7 +639,7 @@
+ 
+ if test "x$HAVE_IXJ" = "xyes" ; then
+   AC_CONFIG_FILES(LID/IxJ/Makefile)
+-  SUBDIRS+=" LID/IxJ"
++  SUBDIRS="$SUBDIRS LID/IxJ"
+ fi
+ 
+ dnl     ########################
+@@ -650,7 +650,7 @@
+ fi
+ if test "x$HAVE_VPB" = "xyes" ; then
+   AC_CONFIG_FILES(LID/VPB/Makefile)
+-  SUBDIRS+=" LID/VPB"
++  SUBDIRS="$SUBDIRS LID/VPB"
+ fi
+ 
+ 
+@@ -675,7 +675,7 @@
+ 
+ if test "x$HAVE_SPANDSP" = "xyes" ; then
+   AC_CONFIG_FILES(fax/fax_spandsp/Makefile)
+-  SUBDIRS+=" fax/fax_spandsp"
++  SUBDIRS="$SUBDIRS fax/fax_spandsp"
+ fi
+ 
+ 

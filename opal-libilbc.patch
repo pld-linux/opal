@@ -1,0 +1,70 @@
+--- opal-3.10.9/opal.m4.orig	2012-11-26 11:49:22.000000000 +0100
++++ opal-3.10.9/opal.m4	2013-01-24 14:11:21.415599845 +0100
+@@ -969,11 +969,11 @@
+ 
+           saved_LIBS="$LIBS"
+           LIBS="$LIBS -lilbc"
+-          AC_CHECK_LIB(ilbc, iLBC_encode, [has_ilbc=yes], [has_ilbc=no])
++          AC_CHECK_LIB(ilbc, iLBC_encode, [has_ilbc=yes], [AC_CHECK_LIB(ilbc, WebRtcIlbcfix_EncodeImpl, [has_ilbc=yes], [has_ilbc=no])])
+           LIBS=$saved_LIBS
+ 
+           if test "x${has_ilbc}" = "xyes"; then
+-              AC_CHECK_HEADERS([ilbc/iLBC_decode.h ilbc/iLBC_define.h ilbc/iLBC_encode.h], [has_ilbc=yes], [has_ilbc=no])
++              AC_CHECK_HEADERS([ilbc.h], [has_ilbc=yes], [AC_CHECK_HEADERS([ilbc/iLBC_decode.h ilbc/iLBC_define.h ilbc/iLBC_encode.h], [has_ilbc=yes], [has_ilbc=no])])
+           fi
+ 
+ 					if test "x${has_ilbc}" = "xyes"; then
+--- opal-3.10.9/plugins/audio/iLBC/ilbccodec.c.orig	2012-11-26 11:48:21.000000000 +0100
++++ opal-3.10.9/plugins/audio/iLBC/ilbccodec.c	2013-01-24 16:11:10.948783326 +0100
+@@ -37,9 +37,24 @@
+ 
+ #include <codec/opalplugin.h>
+ 
++#if defined(HAVE_ILBC_ILBC_DECODE_H) && defined(HAVE_ILBC_ILBC_ENCODE_H) && defined(HAVE_ILBC_ILBC_DEFINE_H)
++#include <ilbc/iLBC_encode.h> 
++#include <ilbc/iLBC_decode.h> 
++#include <ilbc/iLBC_define.h> 
++#define ILBC_SAMPLE_TYPE float
++#elif defined(HAVE_ILBC_H)
++#include <ilbc.h>
++#define ILBC_SAMPLE_TYPE WebRtc_Word16
++#define NO_OF_BYTES_20MS 38
++#define NO_OF_BYTES_30MS 50
++#define MIN_SAMPLE -32768
++#define MAX_SAMPLE 32767
++#else
++#define ILBC_SAMPLE_TYPE float
+ #include "iLBC/iLBC_encode.h" 
+ #include "iLBC/iLBC_decode.h" 
+ #include "iLBC/iLBC_define.h" 
++#endif
+ 
+ #define	BITRATE_30MS	NO_OF_BYTES_30MS*8*8000/BLOCKL_30MS
+ #define	BITRATE_20MS	NO_OF_BYTES_20MS*8*8000/BLOCKL_20MS
+@@ -91,7 +91,7 @@
+                                        unsigned * toLen,
+                                    unsigned int * flag)
+ {
+-  float block[BLOCKL_MAX];
++  ILBC_SAMPLE_TYPE block[BLOCKL_MAX];
+   int i;
+ 
+   struct iLBC_Enc_Inst_t_ * encoder = (struct iLBC_Enc_Inst_t_ *)context;
+@@ -102,7 +102,7 @@
+ 
+   /* convert signal to float */
+   for (i = 0; i < encoder->blockl; i++)
+-    block[i] = (float)sampleBuffer[i];
++    block[i] = (ILBC_SAMPLE_TYPE)sampleBuffer[i];
+ 
+   /* do the actual encoding */
+   iLBC_encode(to, block, encoder);
+@@ -124,7 +124,7 @@
+                                    unsigned int * flag)
+ {
+   int i;
+-  float block[BLOCKL_MAX];
++  ILBC_SAMPLE_TYPE block[BLOCKL_MAX];
+ 
+   struct iLBC_Dec_Inst_t_ * decoder = (struct iLBC_Dec_Inst_t_ *)context;
+   short * sampleBuffer = (short *)to;
