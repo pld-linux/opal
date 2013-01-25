@@ -2,13 +2,12 @@
 #	SBC plugin is missing bluez_sbc subdir
 #	fix static libname (libopal_s.a)
 #	IPv6 support requires IPv6 support in ptlib
-#       SpanDSP FAX support requires t38_indicator symbol
 #	MPEG4 rate control correction requires libavcodec sources
-#       CAPI support
+#	CAPI support
 #	VPB support (--enable-libvpb, needs exceptions enabled in ptlib, BR: libvpb)
 #
 # WARNING: opal version should match Ekiga and ptlib versions
-#      Recommendations: http://wiki.ekiga.org/index.php/Download_Ekiga_sources
+#	Recommendations: http://wiki.ekiga.org/index.php/Download_Ekiga_sources
 #
 # Conditional build:
 %bcond_with	sip_fax_only	# Minimal build for t38modem + SIP
