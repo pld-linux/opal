@@ -2,7 +2,6 @@
 #	SBC plugin is missing bluez_sbc subdir
 #	fix static libname (libopal_s.a)
 #	IPv6 support requires IPv6 support in ptlib
-#	x264+ffmpeg detection sucks - it doesn't work with --as-needed
 #       SpanDSP FAX support requires t38_indicator symbol
 #	MPEG4 rate control correction requires libavcodec sources
 #       CAPI support
@@ -19,9 +18,6 @@
 %bcond_with	capi		# CAPI [TODO: libcapi20, capi20.h]
 %bcond_with	java		# Java JNI support
 %bcond_with	ruby		# Ruby support
-#
-# Don't touch this! strip removes all symbols from library
-%define		no_install_post_strip		1
 #
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
@@ -66,8 +62,6 @@ BuildRequires:	unixODBC-devel
 %endif
 %requires_eq	ptlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-%define		filterout_ld    -Wl,--as-needed
 
 %description
 The OPAL project aims to create a full featured, interoperable, Open
@@ -183,14 +177,13 @@ install -d $RPM_BUILD_ROOT%{_bindir}
 %{!?with_sip_fax_only:install samples/simple/obj/simpleopal $RPM_BUILD_ROOT%{_bindir}}
 
 # This needs to be done after 'make install'
-sed -i -e \
-'s,^OPALDIR.*=.*$,OPALDIR\t\t\t\t= %{_libdir}/opal-%{version},;'\
-'s,^OPAL_SRCDIR.*=.*$,OPAL_SRCDIR\t\t\t= %{_usrsrc}/debug/opal-%{version},;'\
-'s,^OPAL_INCDIR.*=.*$,OPAL_INCDIR\t\t\t= %{_includedir}/opal,;'\
-'s,^OPAL_LIBDIR.*=.*$,OPAL_LIBDIR\t\t\t= %{_libdir},;' \
-opal_defs.mak
-
-install opal_{inc,defs}.mak $RPM_BUILD_ROOT%{_includedir}/opal
+%{__sed} \
+	-e 's,^OPALDIR.*=.*$,OPALDIR\t\t\t\t= %{_libdir}/opal-%{version},;' \
+	-e 's,^OPAL_SRCDIR.*=.*$,OPAL_SRCDIR\t\t\t= %{_usrsrc}/debug/opal-%{version},;' \
+	-e 's,^OPAL_INCDIR.*=.*$,OPAL_INCDIR\t\t\t= %{_includedir}/opal,;' \
+	-e 's,^OPAL_LIBDIR.*=.*$,OPAL_LIBDIR\t\t\t= %{_libdir},;' \
+	opal_defs.mak > $RPM_BUILD_ROOT%{_includedir}/opal/opal_defs.mak
+cp -p opal_inc.mak $RPM_BUILD_ROOT%{_includedir}/opal
 
 %clean
 rm -rf $RPM_BUILD_ROOT
