@@ -1,23 +1,30 @@
 # TODO:
 #	SBC plugin is missing bluez_sbc subdir
 #	fix static libname (libopal_s.a)
-#	IPv6 support requires IPv6 support in ptlib
 #	MPEG4 rate control correction requires libavcodec sources
-#	CAPI support
 #	VPB support (--enable-libvpb, needs exceptions enabled in ptlib, BR: libvpb)
+# NOTE: IPv6 support requires IPv6 support in ptlib
 #
 # WARNING: opal version should match Ekiga and ptlib versions
 #	Recommendations: http://wiki.ekiga.org/index.php/Download_Ekiga_sources
 #
 # Conditional build:
-%bcond_with	sip_fax_only	# Minimal build for t38modem + SIP
+%bcond_with	sip_fax_only	# minimal build for t38modem + SIP
 %bcond_without	celt		# CELT codec support
-%bcond_with	srtp		# SRTP protocol support (mutually exclusive with zrtp)
+%bcond_without	srtp		# SRTP protocol support (mutually exclusive with zrtp)
 %bcond_with	zrtp		# ZRTP protocol support [TODO: libzrtp[3]]
-%bcond_with	capi		# CAPI [TODO: libcapi20, capi20.h]
+%bcond_without	capi		# CAPI support
+%bcond_with	vpb		# Voicetronix VPB support
 %bcond_with	java		# Java JNI support
 %bcond_with	ruby		# Ruby support
 #
+%if %{with zrtp}
+%undefine	with_srtp
+%endif
+%if %{with sip_fax_only}
+%undefine	with_srtp
+%undefine	with_zrtp
+%endif
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
@@ -35,12 +42,16 @@ Patch4:		%{name}-ah.patch
 URL:		http://www.opalvoip.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
+%{?with_capi:BuildRequires:	capi4k-utils-devel}
 %{?with_celt:BuildRequires:	celt-devel}
 BuildRequires:	expat-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
 BuildRequires:	ptlib-devel >= 1:2.10.9
 BuildRequires:	sed >= 4.0
+# with speexdsp
+BuildRequires:	speex-devel >= 1:1.2
+%{?with_srtp:BuildRequires:	srtp-devel}
 %if %{without sip_fax_only}
 BuildRequires:	SDL-devel
 # libavcodec >= 51.11.0 libavutil
@@ -48,13 +59,12 @@ BuildRequires:	ffmpeg-devel
 %{?with_java:BuildRequires:	jdk}
 BuildRequires:	libgsm-devel
 BuildRequires:	libtheora-devel
+%{?with_vpb:BuildRequires:	libvpb-devel}
 # ABI 0.102
 BuildRequires:	libx264-devel >= 0.1.3-1.20101031_2245.1
 BuildRequires:	webrtc-libilbc-devel
 BuildRequires:	openssl-devel
 %{?with_ruby:BuildRequires:	ruby-devel}
-# with speexdsp
-BuildRequires:	speex-devel >= 1:1.2
 BuildRequires:	spandsp-devel
 BuildRequires:	swig
 BuildRequires:	unixODBC-devel
@@ -79,8 +89,11 @@ Summary:	Opal development files
 Summary(pl.UTF-8):	Pliki dla developerów Opal
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+%{?with_capi:Requires:	capi4k-utils-devel}
 Requires:	libstdc++-devel
 Requires:	ptlib-devel >= 1:2.10.9
+Requires:	speex-devel >= 1:1.2
+%{?with_srtp:Requires:	srtp-devel}
 
 %description devel
 Header files and libraries for developing applications that use OPAL.
@@ -142,12 +155,13 @@ cd ..
 	--disable-sipim \
 	--disable-video \
 %else
-	%{?with_capi:--enable-capi} \
+	%{!?with_capi:--disable-capi} \
 	%{!?with_celt:--disable-celt} \
 	--enable-ixj \
 	%{?with_java:--enable-java} \
 	%{?with_ruby:--enable-ruby} \
-	%{?with_srtp:--enable-srtp} \
+	%{!?with_srtp:--disable-srtp} \
+	%{?with_vpb:--enable-vpb} \
 	%{?with_zrtp:--enable-zrtp}
 %endif
 
