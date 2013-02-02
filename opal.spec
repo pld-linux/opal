@@ -2,7 +2,6 @@
 #	SBC plugin is missing bluez_sbc subdir
 #	fix static libname (libopal_s.a)
 #	MPEG4 rate control correction requires libavcodec sources
-#	VPB support (--enable-libvpb, needs exceptions enabled in ptlib, BR: libvpb)
 # NOTE: IPv6 support requires IPv6 support in ptlib
 #
 # WARNING: opal version should match Ekiga and ptlib versions
@@ -12,7 +11,7 @@
 %bcond_with	sip_fax_only	# minimal build for t38modem + SIP
 %bcond_without	celt		# CELT codec support
 %bcond_without	srtp		# SRTP protocol support (mutually exclusive with zrtp)
-%bcond_with	zrtp		# ZRTP protocol support [TODO: libzrtp[3]]
+%bcond_with	zrtp		# ZRTP protocol support (mutually exclusive with zrtp; broken as of 3.10.9)
 %bcond_without	capi		# CAPI support
 %bcond_with	vpb		# Voicetronix VPB support
 %bcond_with	java		# Java JNI support
@@ -39,6 +38,7 @@ Patch1:		%{name}-ffmpeg10.patch
 Patch2:		%{name}-sh.patch
 Patch3:		%{name}-libilbc.patch
 Patch4:		%{name}-ah.patch
+Patch5:		%{name}-exceptions.patch
 URL:		http://www.opalvoip.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
@@ -46,6 +46,7 @@ BuildRequires:	automake
 %{?with_celt:BuildRequires:	celt-devel}
 BuildRequires:	expat-devel
 BuildRequires:	libstdc++-devel
+%{?with_zrtp:BuildRequires:	libzrtp-devel}
 BuildRequires:	pkgconfig
 BuildRequires:	ptlib-devel >= 1:2.10.9
 BuildRequires:	sed >= 4.0
@@ -59,7 +60,7 @@ BuildRequires:	ffmpeg-devel
 %{?with_java:BuildRequires:	jdk}
 BuildRequires:	libgsm-devel
 BuildRequires:	libtheora-devel
-%{?with_vpb:BuildRequires:	libvpb-devel}
+%{?with_vpb:BuildRequires:	vpb-devel}
 # ABI 0.102
 BuildRequires:	libx264-devel >= 0.1.3-1.20101031_2245.1
 BuildRequires:	webrtc-libilbc-devel
@@ -91,6 +92,7 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 %{?with_capi:Requires:	capi4k-utils-devel}
 Requires:	libstdc++-devel
+%{?with_zrtp:Requires:	libzrtp-devel}
 Requires:	ptlib-devel >= 1:2.10.9
 Requires:	speex-devel >= 1:1.2
 %{?with_srtp:Requires:	srtp-devel}
@@ -121,6 +123,7 @@ Biblioteki statyczne OPAL.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%{?with_vpb:%patch5 -p1}
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
@@ -162,7 +165,13 @@ cd ..
 	%{?with_ruby:--enable-ruby} \
 	%{!?with_srtp:--disable-srtp} \
 	%{?with_vpb:--enable-vpb} \
-	%{?with_zrtp:--enable-zrtp}
+%if %{with zrtp}
+	--enable-zrtp \
+	--with-bn-includedir=/usr/include \
+	--with-bn-libdir=%{_libdir} \
+	--with-zrtp-includedir=/usr/include/libzrtp \
+	--with-zrtp-libdir=%{_libdir}
+%endif
 %endif
 
 %{__make} %{?debug:debug}%{!?debug:opt} \
@@ -235,7 +244,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/opal-%{version}/fax/spandsp_ptplugin.so
 %dir %{_libdir}/opal-%{version}/lid
 %attr(755,root,root) %{_libdir}/opal-%{version}/lid/ixj_lid_pwplugin.so
-#%attr(755,root,root) %{_libdir}/opal-%{version}/lid/vpb_lid_pwplugin.so
+%{?with_vpb:%attr(755,root,root) %{_libdir}/opal-%{version}/lid/vpb_ptplugin.so}
 %endif
 
 %files devel

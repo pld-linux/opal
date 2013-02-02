@@ -1,0 +1,19 @@
+--- opal-3.10.9/opal.m4.orig	2013-02-01 20:14:24.184072390 +0100
++++ opal-3.10.9/opal.m4	2013-02-01 20:53:31.337356800 +0100
+@@ -292,7 +292,7 @@
+ 	    OSTYPE=`$PKG_CONFIG ptlib --variable=ostype`
+ 
+             PTLIB_VERSION=`$PKG_CONFIG ptlib --modversion`
+-            PTLIB_CFLAGS=`$PKG_CONFIG ptlib --cflags`
++            PTLIB_CFLAGS=`$PKG_CONFIG ptlib --cflags | sed -e 's, *-fno-exceptions,,'`
+             PTLIB_CXXFLAGS=`$PKG_CONFIG ptlib --variable=cxxflags`
+             PTLIB_LIBS=`$PKG_CONFIG ptlib --libs`
+ 
+@@ -311,6 +311,7 @@
+ 	    OSTYPE=`$PKG_CONFIG ptlib --variable=ostype`
+ 
+             PTLIB_VERSION=`$PKG_CONFIG ptlib --modversion`
++            PTLIB_CFLAGS=`$PKG_CONFIG ptlib --cflags | sed -e 's, *-fno-exceptions,,'`
+             PTLIB_CXXFLAGS=`$PKG_CONFIG ptlib --variable=cxxflags` 
+             DEBUG_LIBS=`$PKG_CONFIG ptlib --define-variable=suffix=_d --libs`
+             RELEASE_LIBS="$PTLIB_LIBS"
