@@ -1,19 +1,9 @@
---- opal-3.10.9/opal.m4.orig	2013-02-01 20:14:24.184072390 +0100
-+++ opal-3.10.9/opal.m4	2013-02-01 20:53:31.337356800 +0100
-@@ -292,7 +292,7 @@
- 	    OSTYPE=`$PKG_CONFIG ptlib --variable=ostype`
+--- opal-3.10.9/plugins/LID/VPB/Makefile.in.orig	2012-11-26 11:48:28.000000000 +0100
++++ opal-3.10.9/plugins/LID/VPB/Makefile.in	2013-02-02 12:57:10.136151676 +0100
+@@ -47,5 +47,6 @@
+ INSTALL_DIR := @LID_PLUGIN_DIR@
+ PLUGINDIR   := @PLUGINDIR@
+ include $(PLUGINDIR)/plugin-inc.mak
++CFLAGS += -fexceptions
  
-             PTLIB_VERSION=`$PKG_CONFIG ptlib --modversion`
--            PTLIB_CFLAGS=`$PKG_CONFIG ptlib --cflags`
-+            PTLIB_CFLAGS=`$PKG_CONFIG ptlib --cflags | sed -e 's, *-fno-exceptions,,'`
-             PTLIB_CXXFLAGS=`$PKG_CONFIG ptlib --variable=cxxflags`
-             PTLIB_LIBS=`$PKG_CONFIG ptlib --libs`
- 
-@@ -311,6 +311,7 @@
- 	    OSTYPE=`$PKG_CONFIG ptlib --variable=ostype`
- 
-             PTLIB_VERSION=`$PKG_CONFIG ptlib --modversion`
-+            PTLIB_CFLAGS=`$PKG_CONFIG ptlib --cflags | sed -e 's, *-fno-exceptions,,'`
-             PTLIB_CXXFLAGS=`$PKG_CONFIG ptlib --variable=cxxflags` 
-             DEBUG_LIBS=`$PKG_CONFIG ptlib --define-variable=suffix=_d --libs`
-             RELEASE_LIBS="$PTLIB_LIBS"
+ ###########################################

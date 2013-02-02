@@ -1,0 +1,21 @@
+--- opal-3.10.9/configure.ac.orig	2013-02-02 11:32:55.486257032 +0100
++++ opal-3.10.9/configure.ac	2013-02-02 12:55:44.492820131 +0100
+@@ -453,7 +453,7 @@
+ if test "x$OPAL_RUBY" = "xyes" ; then
+   AC_CHECK_PROG(HAS_RUBY,ruby,yes)
+   if test "x$HAS_RUBY" = "xyes" ; then
+-    RUBY_CFLAGS=-I`ruby -e 'puts $:.join(" -I")'`
++    RUBY_CFLAGS="$(ruby -r rbconfig -e 'printf("-I%s -I%s/%s", Config::CONFIG[["rubyhdrdir"]], Config::CONFIG[["rubyhdrdir"]], Config::CONFIG[["arch"]])' 2>/dev/null)"
+     oldCFLAGS="$CFLAGS"
+     oldCPPFLAGS="$CPPFLAGS"
+     CFLAGS="$CFLAGS $RUBY_CFLAGS"
+--- opal-3.10.9/opal_defs.mak.in.orig	2012-11-26 11:49:22.000000000 +0100
++++ opal-3.10.9/opal_defs.mak.in	2013-02-02 17:03:28.472510316 +0100
+@@ -111,6 +111,7 @@
+ OPAL_T38_CAP	  = @OPAL_T38_CAPABILITY@
+ OPAL_FAX          = @OPAL_FAX@
+ OPAL_JAVA         = @OPAL_JAVA@
++OPAL_RUBY         = @OPAL_RUBY@
+ SPEEXDSP_SYSTEM   = @SPEEXDSP_SYSTEM@
+ OPAL_HAS_MSRP	  = @OPAL_HAS_MSRP@
+ OPAL_HAS_SIPIM	  = @OPAL_HAS_SIPIM@

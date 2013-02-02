@@ -13,14 +13,16 @@
 %bcond_without	srtp		# SRTP protocol support (mutually exclusive with zrtp)
 %bcond_with	zrtp		# ZRTP protocol support (mutually exclusive with zrtp; broken as of 3.10.9)
 %bcond_without	capi		# CAPI support
-%bcond_with	vpb		# Voicetronix VPB support
-%bcond_with	java		# Java JNI support
-%bcond_with	ruby		# Ruby support
+%bcond_without	vpb		# Voicetronix VPB support
+%bcond_with	java		# Java JNI interface (only swig wrapper, Java part not built)
+%bcond_with	ruby		# Ruby interface (very initial, only swig wrapper)
 #
 %if %{with zrtp}
 %undefine	with_srtp
 %endif
 %if %{with sip_fax_only}
+%undefine	with_java
+%undefine	with_ruby
 %undefine	with_srtp
 %undefine	with_zrtp
 %endif
@@ -39,6 +41,7 @@ Patch2:		%{name}-sh.patch
 Patch3:		%{name}-libilbc.patch
 Patch4:		%{name}-ah.patch
 Patch5:		%{name}-exceptions.patch
+Patch6:		%{name}-ruby.patch
 URL:		http://www.opalvoip.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
@@ -85,6 +88,18 @@ wyposażonej implementacji protokołu telekonferencyjnego ITU H.323,
 który może być używany przez użytkowników prywatnych i komercyjnych
 bez opłat.
 
+%package lid-vpb
+Summary:	Opal LID plugin for Voicetronix VPB devices
+Summary(pl.UTF-8):	Wtyczka Opal LID dla urządzeń VPB firmy Voicetronix
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description lid-vpb
+Opal LID plugin for Voicetronix VPB devices.
+
+%description lid-vpb -l pl.UTF-8
+Wtyczka Opal LID dla urządzeń VPB firmy Voicetronix.
+
 %package devel
 Summary:	Opal development files
 Summary(pl.UTF-8):	Pliki dla developerów Opal
@@ -123,7 +138,8 @@ Biblioteki statyczne OPAL.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%{?with_vpb:%patch5 -p1}
+%patch5 -p1
+%patch6 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
@@ -139,6 +155,7 @@ cd plugins
 cd ..
 # Run  grep '^OPAL_.*=' configure.ac|grep 'yes\|no'  to check current defaults
 %configure \
+	%{?with_java:JDK_ROOT=%{_jvmdir}/java} \
 %if %{with sip_fax_only}
 	--disable-aec \
 	--disable-g711plc \
@@ -150,7 +167,6 @@ cd ..
 	--disable-h501 \
 	--disable-iax \
 	--disable-ivr \
-	--disable-java \
 	--disable-lid \
 	--disable-plugins
 	--disable-rfc4103 \
@@ -158,11 +174,12 @@ cd ..
 	--disable-sipim \
 	--disable-video \
 %else
+	--enable-ixj \
+%endif
 	%{!?with_capi:--disable-capi} \
 	%{!?with_celt:--disable-celt} \
-	--enable-ixj \
-	%{?with_java:--enable-java} \
-	%{?with_ruby:--enable-ruby} \
+	%{!?with_java:--disable-java} \
+	%{!?with_ruby:--disable-ruby} \
 	%{!?with_srtp:--disable-srtp} \
 	%{?with_vpb:--enable-vpb} \
 %if %{with zrtp}
@@ -171,7 +188,6 @@ cd ..
 	--with-bn-libdir=%{_libdir} \
 	--with-zrtp-includedir=/usr/include/libzrtp \
 	--with-zrtp-libdir=%{_libdir}
-%endif
 %endif
 
 %{__make} %{?debug:debug}%{!?debug:opt} \
@@ -244,7 +260,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/opal-%{version}/fax/spandsp_ptplugin.so
 %dir %{_libdir}/opal-%{version}/lid
 %attr(755,root,root) %{_libdir}/opal-%{version}/lid/ixj_lid_pwplugin.so
-%{?with_vpb:%attr(755,root,root) %{_libdir}/opal-%{version}/lid/vpb_ptplugin.so}
+%endif
+
+%if %{with vpb}
+%files lid-vpb
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/opal-%{version}/lid/vpb_ptplugin.so
 %endif
 
 %files devel
