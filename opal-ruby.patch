@@ -19,3 +19,16 @@
  SPEEXDSP_SYSTEM   = @SPEEXDSP_SYSTEM@
  OPAL_HAS_MSRP	  = @OPAL_HAS_MSRP@
  OPAL_HAS_SIPIM	  = @OPAL_HAS_SIPIM@
+--- opal-3.10.10/Makefile.in.orig	2013-02-20 03:18:59.000000000 +0100
++++ opal-3.10.10/Makefile.in	2013-02-24 11:12:25.660369779 +0100
+@@ -386,8 +386,8 @@
+ 
+ ifeq ($(OPAL_RUBY), yes)
+ 
+-RUBY_SRCDIR      = $(OPAL_SRCDIR)/ruby
+-RUBY_WRAPPER     = $(JAVA_SRCDIR)/ruby_swig_wrapper.c
++RUBY_SRCDIR      = $(OPAL_SRCDIR)/Ruby
++RUBY_WRAPPER     = $(RUBY_SRCDIR)/ruby_swig_wrapper.cxx
+ 
+ VPATH_C         += $(RUBY_SRCDIR)
+ SOURCES         += $(RUBY_WRAPPER)
