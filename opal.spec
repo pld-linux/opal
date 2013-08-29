@@ -42,6 +42,7 @@ Patch3:		%{name}-libilbc.patch
 Patch4:		%{name}-ah.patch
 Patch5:		%{name}-exceptions.patch
 Patch6:		%{name}-ruby.patch
+Patch7:		ffmpeg2.patch
 URL:		http://www.opalvoip.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
@@ -140,6 +141,7 @@ Biblioteki statyczne OPAL.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
