@@ -55,7 +55,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	ptlib-devel >= 1:2.10.9
 BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel >= 1:1.2
-BuildRequires:	speexdsp-devel >= 1:1.2
+BuildRequires:	speexdsp-devel >= 1.2
 %{?with_srtp:BuildRequires:	srtp-devel}
 %if %{without sip_fax_only}
 BuildRequires:	SDL-devel
