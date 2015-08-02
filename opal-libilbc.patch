@@ -27,7 +27,7 @@
 +#define ILBC_SAMPLE_TYPE float
 +#elif defined(HAVE_ILBC_H)
 +#include <ilbc.h>
-+#define ILBC_SAMPLE_TYPE WebRtc_Word16
++#define ILBC_SAMPLE_TYPE int16_t
 +#define NO_OF_BYTES_20MS 38
 +#define NO_OF_BYTES_30MS 50
 +#define MIN_SAMPLE -32768
