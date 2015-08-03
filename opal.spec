@@ -6,12 +6,13 @@
 #
 # WARNING: opal version should match Ekiga and ptlib versions
 #	Recommendations: http://wiki.ekiga.org/index.php/Download_Ekiga_sources
+#	(for ekiga 4.0.x it's ptlib 2.10.x + opal 3.10.x)
 #
 # Conditional build:
 %bcond_with	sip_fax_only	# minimal build for t38modem + SIP
 %bcond_without	celt		# CELT codec support
 %bcond_without	srtp		# SRTP protocol support (mutually exclusive with zrtp)
-%bcond_with	zrtp		# ZRTP protocol support (mutually exclusive with zrtp; broken as of 3.10.9)
+%bcond_with	zrtp		# ZRTP protocol support (mutually exclusive with srtp; broken as of 3.10.9)
 %bcond_without	capi		# CAPI support
 %bcond_without	vpb		# Voicetronix VPB support
 %bcond_with	java		# Java JNI interface (only swig wrapper, Java part not built)
@@ -29,12 +30,12 @@
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
-Version:	3.10.10
-Release:	5
+Version:	3.10.11
+Release:	1
 License:	MPL v1.0
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
-# Source0-md5:	b923e1c75fe0643bdf7a4ad7b1bc8e20
+# Source0-md5:	fc36a30d2cbce0fbf7cb6ef33b8d63c3
 Patch0:		%{name}-build.patch
 Patch1:		%{name}-ffmpeg10.patch
 Patch2:		%{name}-sh.patch
