@@ -37,13 +37,13 @@ Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	fc36a30d2cbce0fbf7cb6ef33b8d63c3
 Patch0:		%{name}-build.patch
-Patch1:		%{name}-ffmpeg10.patch
+Patch1:		ffmpeg.patch
 Patch2:		%{name}-sh.patch
 Patch3:		%{name}-libilbc.patch
 Patch4:		%{name}-ah.patch
 Patch5:		%{name}-exceptions.patch
 Patch6:		%{name}-ruby.patch
-Patch7:		ffmpeg2.patch
+Patch7:		srtp.patch
 URL:		http://www.opalvoip.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
@@ -57,7 +57,7 @@ BuildRequires:	ptlib-devel >= 1:2.10.9
 BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel >= 1:1.2
 BuildRequires:	speexdsp-devel >= 1.2
-%{?with_srtp:BuildRequires:	srtp-devel}
+%{?with_srtp:BuildRequires:	libsrtp2-devel}
 %if %{without sip_fax_only}
 BuildRequires:	SDL-devel
 # libavcodec >= 51.11.0 libavutil
@@ -112,7 +112,7 @@ Requires:	libstdc++-devel
 %{?with_zrtp:Requires:	libzrtp-devel}
 Requires:	ptlib-devel >= 1:2.10.9
 Requires:	speex-devel >= 1:1.2
-%{?with_srtp:Requires:	srtp-devel}
+%{?with_srtp:Requires:	libsrtp2-devel}
 
 %description devel
 Header files and libraries for developing applications that use OPAL.
@@ -158,6 +158,8 @@ cd plugins
 cd ..
 # Run  grep '^OPAL_.*=' configure.ac|grep 'yes\|no'  to check current defaults
 %configure \
+	CFLAGS="%{rpmcflags} -std=gnu++98" \
+	CXXFLAGS="%{rpmcxxflags} -std=gnu++98" \
 	%{?with_java:JDK_ROOT=%{_jvmdir}/java} \
 %if %{with sip_fax_only}
 	--disable-aec \
