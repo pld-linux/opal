@@ -31,7 +31,7 @@ Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
 Version:	3.10.11
-Release:	4
+Release:	5
 License:	MPL v1.0
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
@@ -264,6 +264,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/opal-%{version}/fax
 %attr(755,root,root) %{_libdir}/opal-%{version}/fax/spandsp_ptplugin.so
 %endif
+%dir %{_libdir}/opal-%{version}/lid
 
 %if %{with vpb}
 %files lid-vpb
