@@ -13,7 +13,7 @@
 %bcond_without	celt		# CELT codec support
 %bcond_without	srtp		# SRTP protocol support (mutually exclusive with zrtp)
 %bcond_with	zrtp		# ZRTP protocol support (mutually exclusive with srtp; broken as of 3.10.9)
-%bcond_without	capi		# CAPI support
+%bcond_with	capi		# CAPI support
 %bcond_without	vpb		# Voicetronix VPB support
 %bcond_with	java		# Java JNI interface (only swig wrapper, Java part not built)
 %bcond_with	ruby		# Ruby interface (very initial, only swig wrapper)
