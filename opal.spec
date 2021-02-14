@@ -14,6 +14,7 @@
 %bcond_without	srtp		# SRTP protocol support (mutually exclusive with zrtp)
 %bcond_with	zrtp		# ZRTP protocol support (mutually exclusive with srtp; broken as of 3.10.9)
 %bcond_with	capi		# CAPI support
+%bcond_without	vpb		# Voicetronix VPB support
 %bcond_with	java		# Java JNI interface (only swig wrapper, Java part not built)
 %bcond_with	ruby		# Ruby interface (very initial, only swig wrapper)
 #
@@ -41,6 +42,7 @@ BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 %{?with_capi:BuildRequires:	capi4k-utils-devel}
 %{?with_celt:BuildRequires:	celt-devel}
+BuildRequires:	dahdi-linux-devel
 BuildRequires:	expat-devel
 BuildRequires:	libstdc++-devel
 %{?with_zrtp:BuildRequires:	libzrtp-devel}
@@ -57,6 +59,7 @@ BuildRequires:	ffmpeg-devel
 %{?with_java:BuildRequires:	jdk}
 BuildRequires:	libgsm-devel
 BuildRequires:	libtheora-devel
+%{?with_vpb:BuildRequires:	vpb-devel}
 # ABI 0.102
 BuildRequires:	libx264-devel >= 0.1.3-1.20101031_2245.1
 BuildRequires:	webrtc-libilbc-devel
@@ -80,6 +83,18 @@ Celem projektu OPAL jest stworzenie w pełni funkcjonalnej i
 wyposażonej implementacji protokołu telekonferencyjnego ITU H.323,
 który może być używany przez użytkowników prywatnych i komercyjnych
 bez opłat.
+
+%package lid-vpb
+Summary:	Opal LID plugin for Voicetronix VPB devices
+Summary(pl.UTF-8):	Wtyczka Opal LID dla urządzeń VPB firmy Voicetronix
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description lid-vpb
+Opal LID plugin for Voicetronix VPB devices.
+
+%description lid-vpb -l pl.UTF-8
+Wtyczka Opal LID dla urządzeń VPB firmy Voicetronix.
 
 %package devel
 Summary:	Opal development files
@@ -138,6 +153,7 @@ cd ..
 	--disable-h501 \
 	--disable-iax \
 	--disable-ivr \
+	--disable-lid \
 	--disable-plugins
 	--disable-rfc4103 \
 	--disable-rfc4175 \
@@ -151,6 +167,7 @@ cd ..
 	%{!?with_java:--disable-java} \
 	%{!?with_ruby:--disable-ruby} \
 	%{!?with_srtp:--disable-srtp} \
+	%{?with_vpb:--enable-vpb} \
 %if %{with zrtp}
 	--enable-zrtp \
 	--with-bn-includedir=/usr/include \
@@ -207,6 +224,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/theora_ptplugin.so
 %dir %{_libdir}/opal-%{version}/fax
 %attr(755,root,root) %{_libdir}/opal-%{version}/fax/spandsp_ptplugin.so
+%endif
+%dir %{_libdir}/opal-%{version}/lid
+
+%if %{with vpb}
+%files lid-vpb
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/opal-%{version}/lid/vpb_ptplugin.so
 %endif
 
 %files devel
