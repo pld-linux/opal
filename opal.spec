@@ -14,7 +14,7 @@
 %bcond_without	srtp		# SRTP protocol support (mutually exclusive with zrtp)
 %bcond_with	zrtp		# ZRTP protocol support (mutually exclusive with srtp; broken as of 3.10.9)
 %bcond_with	capi		# CAPI support
-%bcond_without	vpb		# Voicetronix VPB support
+%bcond_with	vpb		# Voicetronix VPB support
 %bcond_with	java		# Java JNI interface (only swig wrapper, Java part not built)
 %bcond_with	ruby		# Ruby interface (very initial, only swig wrapper)
 #
@@ -37,13 +37,14 @@ Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	0b4dfe603834b3cf2252782f1594403d
 Patch0:		celt.patch
+Patch1:		g7221.patch
 URL:		http://www.opalvoip.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 %{?with_capi:BuildRequires:	capi4k-utils-devel}
 %{?with_celt:BuildRequires:	celt-devel}
-BuildRequires:	dahdi-linux-devel
 BuildRequires:	expat-devel
+%{?with_srtp:BuildRequires:	libsrtp2-devel}
 BuildRequires:	libstdc++-devel
 %{?with_zrtp:BuildRequires:	libzrtp-devel}
 BuildRequires:	pkgconfig
@@ -51,7 +52,6 @@ BuildRequires:	ptlib-devel >= 1:2.18.5
 BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel >= 1:1.2
 BuildRequires:	speexdsp-devel >= 1.2
-%{?with_srtp:BuildRequires:	libsrtp2-devel}
 %if %{without sip_fax_only}
 BuildRequires:	SDL-devel
 # libavcodec >= 51.11.0 libavutil
@@ -62,13 +62,14 @@ BuildRequires:	libtheora-devel
 %{?with_vpb:BuildRequires:	vpb-devel}
 # ABI 0.102
 BuildRequires:	libx264-devel >= 0.1.3-1.20101031_2245.1
-BuildRequires:	webrtc-libilbc-devel
 BuildRequires:	openssl-devel
 %{?with_ruby:BuildRequires:	ruby-devel}
 BuildRequires:	spandsp-devel
 BuildRequires:	swig
 BuildRequires:	unixODBC-devel
+BuildRequires:	webrtc-libilbc-devel
 %endif
+BuildConflicts:	dahdi-linux-devel
 %requires_eq	ptlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -101,12 +102,12 @@ Summary:	Opal development files
 Summary(pl.UTF-8):	Pliki dla developerów Opal
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-%{?with_capi:Requires:	capi4k-utils-devel}
+%{?with_capi:Requires: capi4k-utils-devel}
+%{?with_srtp:Requires: libsrtp2-devel}
 Requires:	libstdc++-devel
-%{?with_zrtp:Requires:	libzrtp-devel}
+%{?with_zrtp:Requires: libzrtp-devel}
 Requires:	ptlib-devel >= 1:2.18.5
 Requires:	speex-devel >= 1:1.2
-%{?with_srtp:Requires:	libsrtp2-devel}
 
 %description devel
 Header files and libraries for developing applications that use OPAL.
@@ -130,6 +131,7 @@ Biblioteki statyczne OPAL.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
@@ -184,7 +186,7 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_bindir}
+install -d $RPM_BUILD_ROOT%{_libdir}/opal-%{version}/lid
 
 %{__make} install \
         DESTDIR=$RPM_BUILD_ROOT
@@ -199,20 +201,21 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopal.so.%{version}
 %if %{without sip_fax_only}
-%attr(755,root,root) %{_bindir}/simpleopal
 %dir %{_libdir}/opal-%{version}
 %dir %{_libdir}/opal-%{version}/codecs
 %dir %{_libdir}/opal-%{version}/codecs/audio
 %{?with_celt:%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/celt_ptplugin.so}
-%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g722_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g7221_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g7222_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g722_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/g726_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsm0610_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/gsmamrcodec_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/iLBC_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/ima_adpcm_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/iSAC_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/lpc10_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/opus_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/silk_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/audio/speex_ptplugin.so
 %dir %{_libdir}/opal-%{version}/codecs/video
@@ -222,6 +225,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_x264_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/mpeg4_ffmpeg_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/theora_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/vp8_webm_ptplugin.so
 %dir %{_libdir}/opal-%{version}/fax
 %attr(755,root,root) %{_libdir}/opal-%{version}/fax/spandsp_ptplugin.so
 %endif
@@ -238,6 +242,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopal.so
 %{_includedir}/opal
 %{_pkgconfigdir}/opal.pc
+%{_datadir}/opal/make
 
 %files static
 %defattr(644,root,root,755)

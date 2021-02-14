@@ -1,0 +1,10 @@
+--- opal-3.18.6/plugins/configure.ac~	2021-02-14 17:43:15.000000000 +0100
++++ opal-3.18.6/plugins/configure.ac	2021-02-14 17:50:03.047115640 +0100
+@@ -75,6 +75,7 @@
+       HAVE_G7221="no (internal libg722_1 does not support out-of-source configure)"
+    else
+       AC_CONFIG_SUBDIRS(./audio/G.722.1/libg722_1)
++      HAVE_G7221=yes
+    fi
+ ])
+ 
