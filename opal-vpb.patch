@@ -1,0 +1,39 @@
+--- opal-3.14.3/plugins/configure.ac.orig	2015-08-08 14:10:56.861708220 +0200
++++ opal-3.14.3/plugins/configure.ac	2015-08-08 14:25:02.961672712 +0200
+@@ -355,6 +355,8 @@
+ dnl Line Interface Devices
+ dnl ########################
+ 
++AC_LANG_PUSH([C++])
++
+ OPAL_SYSTEM_PLUGIN(
+    [VPB],
+    [vpb],
+@@ -365,6 +367,7 @@
+    [-lvpb],
+    [#include <vpbapi.h>]
+ )
++AC_LANG_POP([C++])
+ 
+ 
+ dnl ########################################################################
+--- opal-3.18.8/plugins/LID/VPB/Makefile.orig	1970-01-01 01:00:00.000000000 +0100
++++ opal-3.18.8/plugins/LID/VPB/Makefile	2022-04-18 20:34:03.107401623 +0200
+@@ -0,0 +1,7 @@
++BASENAME := vpb
++
++SRCDIR    := $(CURDIR)
++SOURCES   := vpb.cpp
++
++INSTALL_DIR = $(LID_PLUGIN_DIR)
++include $(dir $(lastword $(MAKEFILE_LIST)))../../plugin_inc.mak
+--- opal-3.18.8/plugins/plugin_config.mak.in.orig	2020-10-26 19:16:58.000000000 +0100
++++ opal-3.18.8/plugins/plugin_config.mak.in	2022-04-18 20:59:41.442401080 +0200
+@@ -37,6 +37,7 @@ PLUGIN_SRC_DIR := @PLUGIN_SRC_DIR@
+ AUD_PLUGIN_DIR := @AUD_PLUGIN_DIR@
+ VID_PLUGIN_DIR := @VID_PLUGIN_DIR@
+ FAX_PLUGIN_DIR := @FAX_PLUGIN_DIR@
++LID_PLUGIN_DIR := @LID_PLUGIN_DIR@
+ 
+ CPPFLAGS       := @CPPFLAGS@ -I@prefix@/include -I$(PLUGIN_SRC_DIR)/../include -I$(PLUGIN_SRC_DIR) $(CPPFLAGS)
+ CXXFLAGS       := @CXXFLAGS@ $(CXXFLAGS)

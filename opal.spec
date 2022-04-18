@@ -39,6 +39,7 @@ Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 Patch0:		celt.patch
 Patch1:		g7221.patch
 Patch2:		%{name}-cxx11.patch
+Patch3:		%{name}-vpb.patch
 # domain suspended (2022.04)
 #URL:		http://www.opalvoip.org/
 URL:		https://sourceforge.net/projects/opalvoip/
@@ -67,6 +68,7 @@ BuildRequires:	libtheora-devel
 BuildRequires:	libx264-devel >= 0.1.3-1.20101031_2245.1
 BuildRequires:	openh264-devel
 BuildRequires:	openssl-devel
+BuildRequires:	opus-devel
 %{?with_ruby:BuildRequires:	ruby-devel}
 BuildRequires:	spandsp-devel
 BuildRequires:	swig
@@ -136,6 +138,7 @@ Biblioteki statyczne OPAL.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
