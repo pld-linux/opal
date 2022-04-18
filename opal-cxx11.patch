@@ -1,0 +1,106 @@
+--- opal-3.18.8/include/opal/connection.h.orig	2022-03-27 16:06:21.000000000 +0200
++++ opal-3.18.8/include/opal/connection.h	2022-04-18 19:11:37.004196964 +0200
+@@ -52,6 +52,7 @@
+ #include <ptclib/script.h>
+ #endif
+ 
++#include <memory>
+ 
+ class OpalEndPoint;
+ class OpalCall;
+@@ -1931,10 +1932,10 @@ class OpalConnection : public PSafeObjec
+     virtual void DisableRecording();
+ 
+     PDECLARE_NOTIFIER(RTP_DataFrame, OpalConnection, OnRecordAudio);
+-    void InternalOnRecordAudio(PString key, PAutoPtr<RTP_DataFrame> frame);
++    void InternalOnRecordAudio(PString key, std::shared_ptr<RTP_DataFrame> frame);
+ #if OPAL_VIDEO
+     PDECLARE_NOTIFIER(RTP_DataFrame, OpalConnection, OnRecordVideo);
+-    void InternalOnRecordVideo(PString key, PAutoPtr<RTP_DataFrame> frame);
++    void InternalOnRecordVideo(PString key, std::shared_ptr<RTP_DataFrame> frame);
+ #endif
+ 
+     virtual void OnStartRecording(OpalMediaPatch * patch);
+--- opal-3.18.8/src/opal/connection.cxx.orig	2022-03-27 16:06:21.000000000 +0200
++++ opal-3.18.8/src/opal/connection.cxx	2022-04-18 18:52:42.030345645 +0200
+@@ -1175,13 +1175,13 @@ void OpalConnection::OnRecordAudio(RTP_D
+     return;
+ 
+   const OpalMediaPatch * patch = (const OpalMediaPatch *)param;
+-  PAutoPtr<RTP_DataFrame> copyFrame(new RTP_DataFrame(frame.GetPointer(), frame.GetPacketSize()));
+-  GetEndPoint().GetManager().QueueDecoupledEvent(new PSafeWorkArg2<OpalConnection, PString, PAutoPtr<RTP_DataFrame> >(
++  std::shared_ptr<RTP_DataFrame> copyFrame(new RTP_DataFrame(frame.GetPointer(), frame.GetPacketSize()));
++  GetEndPoint().GetManager().QueueDecoupledEvent(new PSafeWorkArg2<OpalConnection, PString, std::shared_ptr<RTP_DataFrame> >(
+                    this, MakeRecordingKey(*patch), copyFrame, &OpalConnection::InternalOnRecordAudio), psprintf("%p", this));
+ }
+ 
+ 
+-void OpalConnection::InternalOnRecordAudio(PString key, PAutoPtr<RTP_DataFrame> frame)
++void OpalConnection::InternalOnRecordAudio(PString key, std::shared_ptr<RTP_DataFrame> frame)
+ {
+   m_ownerCall.OnRecordAudio(key, *frame);
+ }
+@@ -1192,13 +1192,13 @@ void OpalConnection::InternalOnRecordAud
+ void OpalConnection::OnRecordVideo(RTP_DataFrame & frame, P_INT_PTR param)
+ {
+   const OpalMediaPatch * patch = (const OpalMediaPatch *)param;
+-  PAutoPtr<RTP_DataFrame> copyFrame(new RTP_DataFrame(frame.GetPointer(), frame.GetPacketSize()));
+-  GetEndPoint().GetManager().QueueDecoupledEvent(new PSafeWorkArg2<OpalConnection, PString, PAutoPtr<RTP_DataFrame> >(
++  std::shared_ptr<RTP_DataFrame> copyFrame(new RTP_DataFrame(frame.GetPointer(), frame.GetPacketSize()));
++  GetEndPoint().GetManager().QueueDecoupledEvent(new PSafeWorkArg2<OpalConnection, PString, std::shared_ptr<RTP_DataFrame> >(
+                    this, MakeRecordingKey(*patch), copyFrame, &OpalConnection::InternalOnRecordVideo), psprintf("%p", this));
+ }
+ 
+ 
+-void OpalConnection::InternalOnRecordVideo(PString key, PAutoPtr<RTP_DataFrame> frame)
++void OpalConnection::InternalOnRecordVideo(PString key, std::shared_ptr<RTP_DataFrame> frame)
+ {
+   m_ownerCall.OnRecordVideo(key, *frame);
+ }
+--- opal-3.18.8/include/opal/pres_ent.h.orig	2022-03-27 16:06:21.000000000 +0200
++++ opal-3.18.8/include/opal/pres_ent.h	2022-04-18 19:32:14.790824632 +0200
+@@ -44,6 +44,7 @@
+ #include <im/im.h>
+ 
+ #include <list>
++#include <memory>
+ #include <queue>
+ 
+ class OpalManager;
+@@ -337,10 +338,10 @@ class OpalPresentity : public PSafeObjec
+       const OpalPresenceInfo & info ///< Info on other presentity that changed state
+     );
+ 
+-    typedef PNotifierTemplate< PAutoPtr<OpalPresenceInfo> > PresenceChangeNotifier;
+-    #define PDECLARE_PresenceChangeNotifier(cls, fn) PDECLARE_NOTIFIER2(OpalPresentity, cls, fn, PAutoPtr<OpalPresenceInfo>)
+-    #define PDECLARE_ASYNC_PresenceChangeNotifier(cls, fn) PDECLARE_ASYNC_NOTIFIER2(OpalPresentity, cls, fn, PAutoPtr<OpalPresenceInfo>)
+-    #define PCREATE_PresenceChangeNotifier(fn) PCREATE_NOTIFIER2(fn, PAutoPtr<OpalPresenceInfo>)
++    typedef PNotifierTemplate< std::shared_ptr<OpalPresenceInfo> > PresenceChangeNotifier;
++    #define PDECLARE_PresenceChangeNotifier(cls, fn) PDECLARE_NOTIFIER2(OpalPresentity, cls, fn, std::shared_ptr<OpalPresenceInfo>)
++    #define PDECLARE_ASYNC_PresenceChangeNotifier(cls, fn) PDECLARE_ASYNC_NOTIFIER2(OpalPresentity, cls, fn, std::shared_ptr<OpalPresenceInfo>)
++    #define PCREATE_PresenceChangeNotifier(fn) PCREATE_NOTIFIER2(fn, std::shared_ptr<OpalPresenceInfo>)
+ 
+     /// Set the notifier for the OnPresenceChange() function.
+     void SetPresenceChangeNotifier(
+--- opal-3.18.8/src/opal/pres_ent.cxx.orig	2022-03-27 16:06:21.000000000 +0200
++++ opal-3.18.8/src/opal/pres_ent.cxx	2022-04-18 19:35:12.363195973 +0200
+@@ -323,7 +323,7 @@ void OpalPresentity::OnPresenceChange(co
+   if (m_onPresenceChangeNotifier.IsNULL())
+     return;
+ 
+-  PAutoPtr<OpalPresenceInfo> pinfo(info.CloneAs<OpalPresenceInfo>());
++  std::shared_ptr<OpalPresenceInfo> pinfo(info.CloneAs<OpalPresenceInfo>());
+   m_onPresenceChangeNotifier(*this, pinfo);
+ }
+ 
+--- opal-3.18.8/src/opal/opal_c.cxx.orig	2022-03-27 16:06:21.000000000 +0200
++++ opal-3.18.8/src/opal/opal_c.cxx	2022-04-18 19:32:26.250762548 +0200
+@@ -2969,7 +2969,7 @@ PString ConvertStringSetWithoutLastNewin
+   return strm.Left(strm.GetLength()-1);
+ }
+ 
+-void OpalManager_C::OnPresenceChange(OpalPresentity &, PAutoPtr<OpalPresenceInfo> info)
++void OpalManager_C::OnPresenceChange(OpalPresentity &, std::shared_ptr<OpalPresenceInfo> info)
+ {
+   OpalMessageBuffer message(OpalIndPresenceChange);
+   SET_MESSAGE_STRING(message, m_param.m_presenceStatus.m_entity,   info->m_entity.AsString());

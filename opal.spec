@@ -30,15 +30,18 @@
 Summary:	Open Phone Abstraction Library (aka OpenH323 v2)
 Summary(pl.UTF-8):	Biblioteka Open Phone Abstraction Library (aka OpenH323 v2)
 Name:		opal
-Version:	3.18.6
-Release:	3
+Version:	3.18.8
+Release:	1
 License:	MPL v1.0
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
-# Source0-md5:	0b4dfe603834b3cf2252782f1594403d
+# Source0-md5:	1f48ea0bef4b0731b4af19928eb02c36
 Patch0:		celt.patch
 Patch1:		g7221.patch
-URL:		http://www.opalvoip.org/
+Patch2:		%{name}-cxx11.patch
+# domain suspended (2022.04)
+#URL:		http://www.opalvoip.org/
+URL:		https://sourceforge.net/projects/opalvoip/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 %{?with_capi:BuildRequires:	capi4k-utils-devel}
@@ -62,6 +65,7 @@ BuildRequires:	libtheora-devel
 %{?with_vpb:BuildRequires:	vpb-devel}
 # ABI 0.102
 BuildRequires:	libx264-devel >= 0.1.3-1.20101031_2245.1
+BuildRequires:	openh264-devel
 BuildRequires:	openssl-devel
 %{?with_ruby:BuildRequires:	ruby-devel}
 BuildRequires:	spandsp-devel
@@ -69,7 +73,6 @@ BuildRequires:	swig
 BuildRequires:	unixODBC-devel
 BuildRequires:	webrtc-libilbc-devel
 %endif
-BuildConflicts:	dahdi-linux-devel
 %requires_eq	ptlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -132,6 +135,7 @@ Biblioteki statyczne OPAL.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 PWLIBDIR=%{_prefix}; export PWLIBDIR
@@ -166,6 +170,7 @@ cd ..
 %endif
 	%{!?with_capi:--disable-capi} \
 	%{!?with_celt:--disable-celt} \
+	--disable-dahdi \
 	%{!?with_java:--disable-java} \
 	%{!?with_ruby:--disable-ruby} \
 	%{!?with_srtp:--disable-srtp} \
@@ -224,6 +229,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_video_pwplugin_helper
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/h264_x264_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/mpeg4_ffmpeg_ptplugin.so
+%attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/openh264_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/theora_ptplugin.so
 %attr(755,root,root) %{_libdir}/opal-%{version}/codecs/video/vp8_webm_ptplugin.so
 %dir %{_libdir}/opal-%{version}/fax
